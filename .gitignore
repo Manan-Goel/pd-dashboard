@@ -1,0 +1,27 @@
+# Ignore large raw Excel files and temporary data
+*.xlsx
+*.xls
+*.csv.tmp
+life_insurance.db
+life_insurance.db-journal
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.env
+.venv/
+env/
+venv/
+
+# Antigravity & Agent workspace artifacts
+.agents/
+scratch/
+.system_generated/
+*.log
+
+# OS & Editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
