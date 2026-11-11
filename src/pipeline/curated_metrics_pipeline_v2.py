@@ -144,14 +144,15 @@ def scan_quarter_blocks_rows(rows: List[Tuple]) -> List[Dict[str, Any]]:
 def detect_unit_multiplier(rows: List[Tuple], sc: int, ec: int) -> float:
     """Detects monetary unit multiplier (to convert to INR Lakhs) within a quarter block."""
     headers = []
-    for r in range(min(16, len(rows))):
+    # Check only metadata header rows (up to row 10), never data rows where amounts live
+    for r in range(min(10, len(rows))):
         for c in range(sc, min(ec + 1, len(rows[r]))):
             v = rows[r][c]
             if v is not None:
                 headers.append(str(v))
     txt = " ".join(headers).lower()
     
-    if "'000" in txt or "thousand" in txt or "` 000" in txt:
+    if re.search(r"(?:\b|['`])000(?:\'s)?\b|\bthousands?\b", txt) and 'lakh' not in txt:
         return 0.01
     elif "crore" in txt or "crs" in txt:
         return 100.0
@@ -232,11 +233,22 @@ class CuratedMetricsPipelineV2:
                             break
                     if total_col is not None: break
 
-                # Check for 'for the quarter' / 'up to the quarter'
+                # Check for 'for the quarter' / 'quarter ended' (excluding up to/year ended)
                 if total_col is None:
                     for c in range(sc, ec + 1):
                         if c == part_col: continue
-                        for r in range(6, min(14, len(rows))):
+                        for r in range(5, min(14, len(rows))):
+                            txt = re.sub(r'\s+', ' ', str(rows[r][c] or '').strip().lower())
+                            if re.search(r'\bq[1-4]\b|quarter ended|for the quarter', txt) and not any(k in txt for k in ['upto', 'up to', 'year ended', 'previous', 'corresponding', 'as at']):
+                                total_col = c
+                                break
+                        if total_col is not None: break
+
+                # Fallback check for any quarter column
+                if total_col is None:
+                    for c in range(sc, ec + 1):
+                        if c == part_col: continue
+                        for r in range(5, min(14, len(rows))):
                             txt = re.sub(r'\s+', ' ', str(rows[r][c] or '').strip().lower())
                             if ('for the quarter' in txt or 'up to the quarter' in txt or 'quarter ended' in txt) and 'previous' not in txt and 'corresponding' not in txt:
                                 total_col = c
@@ -248,7 +260,7 @@ class CuratedMetricsPipelineV2:
                 # Raw magnitude check: if total > 5,000,000 and mult == 1.0, scale was '000
                 test_val = 0.0
                 for r in range(8, len(rows)):
-                    line = str(rows[r][part_col] or '').lower() if part_col < len(rows[r]) else ''
+                    line = " ".join([str(rows[r][c] or '') for c in range(sc, total_col) if rows[r][c] is not None]).strip().lower()
                     if 'total' in line:
                         test_val = clean_val(rows[r][total_col] if total_col < len(rows[r]) else None)
                         break
@@ -256,7 +268,7 @@ class CuratedMetricsPipelineV2:
                     mult = 0.01
 
                 for r in range(8, len(rows)):
-                    line = str(rows[r][part_col] or '').strip().lower() if part_col < len(rows[r]) else ''
+                    line = " ".join([str(rows[r][c] or '') for c in range(sc, total_col) if rows[r][c] is not None]).strip().lower()
                     raw_val = clean_val(rows[r][total_col] if total_col < len(rows[r]) else None)
                     val = round(raw_val * mult, 4)
                     if 'first year' in line:
@@ -506,7 +518,7 @@ class CuratedMetricsPipelineV2:
                     except: pass
 
                 for r in range(10, len(rows)):
-                    line = str(rows[r][part_col] or '').strip().lower() if part_col < len(rows[r]) else ''
+                    line = " ".join([str(rows[r][c] or '') for c in range(sc, q_col) if rows[r][c] is not None]).strip().lower()
                     val = round(clean_val(rows[r][q_col] if q_col < len(rows[r]) else None) * mult, 4)
                     norm_line = re.sub(r'[\(\)/]+', ' ', line)
 

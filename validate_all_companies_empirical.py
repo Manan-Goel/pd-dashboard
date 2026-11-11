@@ -495,11 +495,11 @@ def run_empirical_audit():
             'period_id': 'FY2024-25_Q4',
             'sheet': 'L-4',
             'metric': 'total_premium',
-            'cell_coord': 'Form L-4 Total',
-            'excel_val_raw': 32817,
+            'cell_coord': 'Form L-4 Total (Q4 column)',
+            'excel_val_raw': 48973,
             'unit': 'Lakhs',
-            'expected_db': 32817.0,
-            'desc': 'Form L-4 Total Premium (₹328.17 Cr)'
+            'expected_db': 48973.0,
+            'desc': 'Form L-4 Q4 Total Premium (₹489.73 Cr)'
         },
 
         # --- 10. BANDHAN LIFE ---
