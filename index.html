@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Acko Life Insurance - 64 Curated Metrics Executive Dashboard</title>
+  <title>Life Insurance Statutory Intelligence — 64 Curated Metrics Executive Dashboard</title>
   <!-- Bootstrap 5 CSS -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
   <!-- FontAwesome Icons -->
@@ -15,7 +15,7 @@
       --primary-navy: #0f172a;
       --accent-blue: #0284c7;
       --card-bg: #ffffff;
-      --body-bg: #f1f5f9;
+      --body-bg: #f8fafc;
       --text-muted: #64748b;
     }
     body {
@@ -31,7 +31,7 @@
       padding: 1rem 1.5rem;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     }
-    .badge-acko {
+    .badge-ins {
       background: rgba(56, 189, 248, 0.2);
       color: #38bdf8;
       border: 1px solid rgba(56, 189, 248, 0.4);
@@ -53,7 +53,7 @@
       box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
     }
     .kpi-title {
-      font-size: 0.82rem;
+      font-size: 0.8rem;
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.5px;
@@ -61,7 +61,7 @@
       margin-bottom: 0.4rem;
     }
     .kpi-value {
-      font-size: 1.75rem;
+      font-size: 1.7rem;
       font-weight: 700;
       color: #0f172a;
       line-height: 1.2;
@@ -79,292 +79,338 @@
     .slicer-card {
       background: #ffffff;
       border-radius: 12px;
-      border: 1px solid #cbd5e1;
+      border: 1px solid #e2e8f0;
       padding: 1rem 1.25rem;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.03);
       margin-bottom: 1.5rem;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
     }
     .nav-tabs .nav-link {
       font-weight: 600;
-      color: #64748b;
+      color: var(--text-muted);
       border: none;
-      border-bottom: 3px solid transparent;
-      padding: 0.75rem 1.25rem;
+      padding: 0.65rem 1.2rem;
     }
     .nav-tabs .nav-link.active {
-      color: #0284c7;
-      border-bottom: 3px solid #0284c7;
+      color: var(--accent-blue);
+      border-bottom: 3px solid var(--accent-blue);
       background: transparent;
     }
-    .chart-container {
-      background: #ffffff;
-      border-radius: 12px;
-      border: 1px solid #e2e8f0;
-      padding: 1.25rem;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.04);
-      margin-bottom: 1.5rem;
-      height: 380px;
-    }
     .table-container {
-      background: #ffffff;
+      background: #fff;
       border-radius: 12px;
       border: 1px solid #e2e8f0;
       overflow-x: auto !important;
-      overflow-y: auto !important;
-      max-height: 600px;
-      white-space: nowrap !important;
+      -webkit-overflow-scrolling: touch;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
     }
     .table th {
-      position: sticky;
-      top: 0;
-      background: #0f172a;
-      color: #38bdf8;
       font-size: 0.8rem;
       text-transform: uppercase;
       letter-spacing: 0.5px;
-      z-index: 10;
-      padding: 10px 14px;
+      white-space: nowrap;
     }
     .table td {
-      font-size: 0.84rem;
-      padding: 8px 14px;
+      font-size: 0.85rem;
       vertical-align: middle;
+      white-space: nowrap;
     }
     .badge-metric-id {
+      font-family: monospace;
       font-size: 0.72rem;
-      background: #e0f2fe;
-      color: #0369a1;
+      background-color: #f1f5f9;
+      color: #475569;
+      border: 1px solid #cbd5e1;
       padding: 0.2rem 0.45rem;
       border-radius: 4px;
-      font-weight: 600;
-      margin-right: 4px;
+    }
+    .search-input {
+      max-width: 320px;
+    }
+    .status-dot {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: #10b981;
+      margin-right: 6px;
     }
   </style>
 </head>
 <body>
 
-  <!-- Top Header Navigation -->
-  <div class="top-header">
-    <div class="container-fluid d-flex flex-wrap justify-content-between align-items-center">
+  <!-- Top Navigation Header -->
+  <header class="top-header">
+    <div class="container-fluid d-flex justify-content-between align-items-center">
       <div class="d-flex align-items-center gap-3">
-        <i class="fa-solid fa-building-shield fa-2x text-info"></i>
+        <i class="fa-solid fa-shield-halved fa-2x text-info"></i>
         <div>
-          <h4 class="mb-0 fw-bold">ACKO Life Insurance — Curated Executive Dashboard</h4>
-          <span class="small text-light opacity-75">Statutory 64 Metrics Warehouse &bull; Database: <code>life_insurance_curated_v2.db</code></span>
+          <h5 class="mb-0 fw-bold">Life Insurance Statutory Intelligence Platform</h5>
+          <small class="text-white-50">Unified Star Schema Data Warehouse & 64 Standardized Curated Metrics</small>
         </div>
       </div>
-      <div class="d-flex align-items-center gap-2 mt-2 mt-md-0">
-        <span class="badge-acko"><i class="fa-solid fa-certificate me-1"></i> IRDAI Reg No: 165</span>
-        <span class="badge bg-success px-3 py-2 rounded-pill"><i class="fa-solid fa-circle-check me-1"></i> 100% Reconciled (12 Quarters)</span>
+      <div class="d-flex align-items-center gap-2">
+        <span class="badge-ins" id="companyBadge">
+          <span class="status-dot"></span> Loading Insurers...
+        </span>
+        <span class="badge bg-success-subtle text-success border border-success-subtle px-3 py-2 rounded-pill">
+          <i class="fa-solid fa-check-double me-1"></i> 100% Reconciled
+        </span>
       </div>
     </div>
-  </div>
+  </header>
 
   <div class="container-fluid py-4 px-4">
 
     <!-- Interactive Slicers Bar -->
     <div class="slicer-card">
       <div class="row g-3 align-items-center">
+        <!-- 1. Company Slicer -->
         <div class="col-md-3">
-          <label class="form-label small fw-bold text-muted mb-1"><i class="fa-solid fa-calendar-days text-primary me-1"></i> Quarter / Period Slicer</label>
-          <select id="slicerPeriod" class="form-select form-select-sm fw-semibold" onchange="onPeriodChange()">
-            <option value="ALL">All 12 Quarters (FY2023-24 Q1 to FY2025-26 Q4)</option>
-            <option value="FY2025-26_Q4" selected>FY2025-26 Q4 (Latest Reported Quarter)</option>
-            <option value="FY2025-26_Q3">FY2025-26 Q3</option>
-            <option value="FY2025-26_Q2">FY2025-26 Q2</option>
-            <option value="FY2025-26_Q1">FY2025-26 Q1</option>
-            <option value="FY2024-25_Q4">FY2024-25 Q4</option>
-            <option value="FY2024-25_Q3">FY2024-25 Q3</option>
-            <option value="FY2024-25_Q2">FY2024-25 Q2</option>
-            <option value="FY2024-25_Q1">FY2024-25 Q1</option>
-            <option value="FY2023-24_Q4">FY2023-24 Q4</option>
-            <option value="FY2023-24_Q3">FY2023-24 Q3</option>
-            <option value="FY2023-24_Q2">FY2023-24 Q2</option>
-            <option value="FY2023-24_Q1">FY2023-24 Q1</option>
+          <label class="form-label small fw-bold text-muted mb-1">
+            <i class="fa-solid fa-building text-primary me-1"></i> Insurer / Company Slicer
+          </label>
+          <select id="slicerCompany" class="form-select form-select-sm fw-bold border-primary" onchange="onCompanyChange()">
+            <!-- Populated dynamically -->
           </select>
         </div>
 
+        <!-- 2. Quarter / Period Slicer -->
         <div class="col-md-3">
-          <label class="form-label small fw-bold text-muted mb-1"><i class="fa-solid fa-filter text-info me-1"></i> Metric Category Slicer</label>
+          <label class="form-label small fw-bold text-muted mb-1">
+            <i class="fa-solid fa-calendar-days text-info me-1"></i> Quarter / Period Slicer
+          </label>
+          <select id="slicerPeriod" class="form-select form-select-sm fw-semibold" onchange="onPeriodChange()">
+            <!-- Populated dynamically -->
+          </select>
+        </div>
+
+        <!-- 3. Metric Category Slicer -->
+        <div class="col-md-3">
+          <label class="form-label small fw-bold text-muted mb-1">
+            <i class="fa-solid fa-filter text-info me-1"></i> Metric Category Slicer
+          </label>
           <select id="slicerCategory" class="form-select form-select-sm" onchange="onCategoryChange()">
             <option value="ALL">💎 All 64 Standardized Metrics</option>
             <option value="PREMIUMS">💰 Premiums & Revenue (M01-M15, M24)</option>
-            <option value="VOLUMES">📈 Policies, Lives & Volumes (M25-M30)</option>
-            <option value="CLAIMS">🩺 Claims & Expenses (M16-M22, M37)</option>
-            <option value="SOLVENCY">🛡️ Solvency, Capital & P&L (M31-M35, M55-M58)</option>
-            <option value="CHANNELS">🏢 Intermediary Channels & Productivity (M42, M46-M54)</option>
+            <option value="VOLUMES">📊 Scale & Volumes (M25-M30)</option>
+            <option value="CLAIMS">⚖️ Claims & Benefits Paid (M16-M19)</option>
+            <option value="EXPENSES">📉 Expenses & Persistency (M20-M23, M37-M41)</option>
+            <option value="SOLVENCY">🏛️ Solvency & Capital (M31-M36, M55-M58)</option>
+            <option value="CHANNELS">🌐 Distribution & Channels (M42-M54, M59-M60)</option>
           </select>
         </div>
 
-        <div class="col-md-4">
-          <label class="form-label small fw-bold text-muted mb-1"><i class="fa-solid fa-magnifying-glass text-warning me-1"></i> Live Metric Search Filter</label>
-          <input type="text" id="metricSearch" class="form-control form-control-sm" placeholder="Search metric name (e.g. solvency, single, claim, pat)..." onkeyup="filterTable()">
-        </div>
-
-        <div class="col-md-2 text-end d-flex align-items-end justify-content-end gap-2">
-          <button class="btn btn-outline-secondary btn-sm" onclick="exportTableToCSV()"><i class="fa-solid fa-file-csv me-1 text-success"></i> Export CSV</button>
-          <button class="btn btn-primary btn-sm" onclick="window.print()"><i class="fa-solid fa-print me-1"></i> Print</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Executive KPI Row -->
-    <div class="row g-3 mb-4">
-      <div class="col-md-3 col-sm-6">
-        <div class="kpi-card">
-          <i class="fa-solid fa-money-bill-wave kpi-icon text-success"></i>
-          <div class="kpi-title">Gross Written Premium (GWP)</div>
-          <div class="kpi-value text-success" id="kpiGWP">₹7,212 L</div>
-          <div class="kpi-subtitle" id="kpiGWPgrowth"><span class="badge bg-success-subtle text-success">+264.4% YoY Growth</span></div>
-        </div>
-      </div>
-
-      <div class="col-md-3 col-sm-6">
-        <div class="kpi-card">
-          <i class="fa-solid fa-shield-halved kpi-icon text-primary"></i>
-          <div class="kpi-title">Statutory Solvency Ratio</div>
-          <div class="kpi-value text-primary" id="kpiSolvency">1.80x</div>
-          <div class="kpi-subtitle"><span class="badge bg-primary-subtle text-primary">Compliant (Min 1.50x Req)</span></div>
-        </div>
-      </div>
-
-      <div class="col-md-3 col-sm-6">
-        <div class="kpi-card">
-          <i class="fa-solid fa-users kpi-icon text-info"></i>
-          <div class="kpi-title">Total Policies & Group Lives</div>
-          <div class="kpi-value text-dark" id="kpiPolicies">1,854 pol</div>
-          <div class="kpi-subtitle" id="kpiLives">572,968 Group Lives Covered</div>
-        </div>
-      </div>
-
-      <div class="col-md-3 col-sm-6">
-        <div class="kpi-card">
-          <i class="fa-solid fa-vault kpi-icon text-warning"></i>
-          <div class="kpi-title">Total Sum Assured</div>
-          <div class="kpi-value text-warning-emphasis" id="kpiSumAssured">₹10,138 Cr</div>
-          <div class="kpi-subtitle" id="kpiSAgrowth">+397.7% YoY Growth</div>
+        <!-- 4. Search Filter & Export -->
+        <div class="col-md-3 d-flex gap-2 align-items-end">
+          <div class="flex-grow-1">
+            <label class="form-label small fw-bold text-muted mb-1">
+              <i class="fa-solid fa-magnifying-glass text-warning me-1"></i> Metric Search
+            </label>
+            <input type="text" id="metricSearch" class="form-control form-control-sm" placeholder="Search metric name..." onkeyup="filterTable()">
+          </div>
+          <button class="btn btn-sm btn-outline-primary text-nowrap" onclick="exportTableToCSV()" title="Export Curated Metrics to CSV">
+            <i class="fa-solid fa-file-csv me-1"></i> CSV
+          </button>
         </div>
       </div>
     </div>
 
-    <!-- Secondary KPI Row -->
-    <div class="row g-3 mb-4">
-      <div class="col-md-3 col-sm-6">
-        <div class="kpi-card">
-          <i class="fa-solid fa-hospital-user kpi-icon text-danger"></i>
-          <div class="kpi-title">Gross Claims Paid</div>
-          <div class="kpi-value text-danger" id="kpiClaims">₹644 L</div>
-          <div class="kpi-subtitle">Death & Maturity Benefits</div>
-        </div>
-      </div>
-
-      <div class="col-md-3 col-sm-6">
-        <div class="kpi-card">
-          <i class="fa-solid fa-chart-line kpi-icon text-info"></i>
-          <div class="kpi-title">Net Worth & Paid-up Capital</div>
-          <div class="kpi-value text-info-emphasis" id="kpiNetWorth">₹190.05 Cr</div>
-          <div class="kpi-subtitle">Share Capital: ₹190.05 Cr</div>
-        </div>
-      </div>
-
-      <div class="col-md-3 col-sm-6">
-        <div class="kpi-card">
-          <i class="fa-solid fa-hourglass-half kpi-icon text-purple"></i>
-          <div class="kpi-title">13th Month Persistency</div>
-          <div class="kpi-value text-indigo" id="kpiPersistency">100.0%</div>
-          <div class="kpi-subtitle">Regular Premium Cohort</div>
-        </div>
-      </div>
-
-      <div class="col-md-3 col-sm-6">
-        <div class="kpi-card">
-          <i class="fa-solid fa-envelope-circle-check kpi-icon text-secondary"></i>
-          <div class="kpi-title">Grievances / Complaints</div>
-          <div class="kpi-value text-secondary" id="kpiComplaints">9 complaints</div>
-          <div class="kpi-subtitle">Form L-41 Disposal Rate: 100%</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Main Navigation Tabs -->
+    <!-- Navigation Tabs -->
     <ul class="nav nav-tabs mb-3" id="dashboardTabs" role="tablist">
-      <li class="nav-item" role="presentation">
-        <button class="nav-link active" id="tab-charts" data-bs-toggle="tab" data-bs-target="#content-charts" type="button"><i class="fa-solid fa-chart-pie me-1"></i> Trend Visualizations</button>
+      <li class="nav-item">
+        <button class="nav-link active" id="tab-overview" data-bs-toggle="tab" data-bs-target="#content-overview" type="button">
+          <i class="fa-solid fa-chart-pie me-1 text-primary"></i> Executive Overview
+        </button>
       </li>
-      <li class="nav-item" role="presentation">
-        <button class="nav-link" id="tab-metrics" data-bs-toggle="tab" data-bs-target="#content-metrics" type="button"><i class="fa-solid fa-table-list me-1"></i> Standardized 64 Metrics Explorer</button>
+      <li class="nav-item">
+        <button class="nav-link" id="tab-leaderboard" data-bs-toggle="tab" data-bs-target="#content-leaderboard" type="button">
+          <i class="fa-solid fa-trophy me-1 text-warning"></i> Multi-Company Leaderboard
+        </button>
       </li>
-      <li class="nav-item" role="presentation">
-        <button class="nav-link" id="tab-geo" data-bs-toggle="tab" data-bs-target="#content-geo" type="button"><i class="fa-solid fa-map-location-dot me-1"></i> Geographical Distribution (Field 43)</button>
+      <li class="nav-item">
+        <button class="nav-link" id="tab-metrics" data-bs-toggle="tab" data-bs-target="#content-metrics" type="button">
+          <i class="fa-solid fa-table-list me-1 text-success"></i> 64 Curated Metrics
+        </button>
       </li>
-      <li class="nav-item" role="presentation">
-        <button class="nav-link" id="tab-persistency" data-bs-toggle="tab" data-bs-target="#content-persistency" type="button"><i class="fa-solid fa-timeline me-1"></i> Persistency Cohorts (Field 41)</button>
+      <li class="nav-item">
+        <button class="nav-link" id="tab-geo" data-bs-toggle="tab" data-bs-target="#content-geo" type="button">
+          <i class="fa-solid fa-map-location-dot me-1 text-info"></i> Geographical Disclosures
+        </button>
       </li>
-      <li class="nav-item" role="presentation">
-        <button class="nav-link" id="tab-channels" data-bs-toggle="tab" data-bs-target="#content-channels" type="button"><i class="fa-solid fa-network-wired me-1"></i> Intermediary Channels (Field 42)</button>
+      <li class="nav-item">
+        <button class="nav-link" id="tab-persistency" data-bs-toggle="tab" data-bs-target="#content-persistency" type="button">
+          <i class="fa-solid fa-user-clock me-1 text-warning"></i> Persistency Cohorts
+        </button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link" id="tab-channels" data-bs-toggle="tab" data-bs-target="#content-channels" type="button">
+          <i class="fa-solid fa-network-wired me-1 text-danger"></i> Channels & Intermediaries
+        </button>
       </li>
     </ul>
 
     <!-- Tab Contents -->
     <div class="tab-content" id="dashboardTabsContent">
       
-      <!-- TAB 1: CHARTS & VISUAL TRENDS -->
-      <div class="tab-pane fade show active" id="content-charts">
+      <!-- TAB 1: EXECUTIVE OVERVIEW -->
+      <div class="tab-pane fade show active" id="content-overview">
+        <!-- 8 Core Visual KPI Cards -->
+        <div class="row g-3 mb-4">
+          <div class="col-xl-3 col-md-6">
+            <div class="kpi-card border-start border-4 border-primary">
+              <i class="fa-solid fa-money-bill-trend-up kpi-icon text-primary"></i>
+              <div class="kpi-title">Gross Written Premium (GWP)</div>
+              <div class="kpi-value" id="kpiGWP">₹0 L</div>
+              <div class="kpi-subtitle" id="kpiGWPgrowth"><span class="badge bg-secondary">Loading...</span></div>
+            </div>
+          </div>
+          <div class="col-xl-3 col-md-6">
+            <div class="kpi-card border-start border-4 border-success">
+              <i class="fa-solid fa-scale-balanced kpi-icon text-success"></i>
+              <div class="kpi-title">Regulatory Solvency Ratio</div>
+              <div class="kpi-value" id="kpiSolvency">0.00x</div>
+              <div class="kpi-subtitle text-success fw-semibold"><i class="fa-solid fa-circle-check me-1"></i>IRDAI Floor: 1.50x</div>
+            </div>
+          </div>
+          <div class="col-xl-3 col-md-6">
+            <div class="kpi-card border-start border-4 border-info">
+              <i class="fa-solid fa-users kpi-icon text-info"></i>
+              <div class="kpi-title">Business Scale (Policies & Lives)</div>
+              <div class="kpi-value" id="kpiPolicies">0 pol</div>
+              <div class="kpi-subtitle" id="kpiLives">0 Group Lives Covered</div>
+            </div>
+          </div>
+          <div class="col-xl-3 col-md-6">
+            <div class="kpi-card border-start border-4 border-warning">
+              <i class="fa-solid fa-shield-virus kpi-icon text-warning"></i>
+              <div class="kpi-title">Total Sum Assured Coverage</div>
+              <div class="kpi-value" id="kpiSumAssured">₹0 Cr</div>
+              <div class="kpi-subtitle" id="kpiSAgrowth">Statutory Form L-36</div>
+            </div>
+          </div>
+          <div class="col-xl-3 col-md-6">
+            <div class="kpi-card border-start border-4 border-danger">
+              <i class="fa-solid fa-hand-holding-dollar kpi-icon text-danger"></i>
+              <div class="kpi-title">Gross Claims Paid</div>
+              <div class="kpi-value" id="kpiClaims">₹0 L</div>
+              <div class="kpi-subtitle">Death & Maturity Benefits</div>
+            </div>
+          </div>
+          <div class="col-xl-3 col-md-6">
+            <div class="kpi-card border-start border-4 border-secondary">
+              <i class="fa-solid fa-landmark kpi-icon text-secondary"></i>
+              <div class="kpi-title">Net Worth & Solvency Capital</div>
+              <div class="kpi-value" id="kpiNetWorth">₹0 Cr</div>
+              <div class="kpi-subtitle">Share Capital + Reserves</div>
+            </div>
+          </div>
+          <div class="col-xl-3 col-md-6">
+            <div class="kpi-card border-start border-4 border-primary">
+              <i class="fa-solid fa-chart-line kpi-icon text-primary"></i>
+              <div class="kpi-title">13th Month Persistency</div>
+              <div class="kpi-value" id="kpiPersistency">0.0%</div>
+              <div class="kpi-subtitle" id="kpiMarketShare">Market Share: 0.0%</div>
+            </div>
+          </div>
+          <div class="col-xl-3 col-md-6">
+            <div class="kpi-card border-start border-4 border-dark">
+              <i class="fa-solid fa-headset kpi-icon text-dark"></i>
+              <div class="kpi-title">Grievances & Complaints</div>
+              <div class="kpi-value" id="kpiComplaints">0</div>
+              <div class="kpi-subtitle">Form L-41 Grievances Disposed</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Interactive Charts Row -->
+        <div class="row g-3 mb-4">
+          <div class="col-lg-6">
+            <div class="card p-3 shadow-sm border-0 h-100">
+              <h6 class="fw-bold mb-3"><i class="fa-solid fa-chart-simple text-primary me-2"></i>Premium Trajectory (₹ in Lakhs)</h6>
+              <div style="position: relative; height: 320px;">
+                <canvas id="chartPremium"></canvas>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-6">
+            <div class="card p-3 shadow-sm border-0 h-100">
+              <h6 class="fw-bold mb-3"><i class="fa-solid fa-users-viewfinder text-info me-2"></i>Scale & Volume (Policies vs Lives)</h6>
+              <div style="position: relative; height: 320px;">
+                <canvas id="chartScale"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div class="row g-3">
-          <!-- Premium Inflow Chart -->
           <div class="col-lg-6">
-            <div class="chart-container">
-              <h6 class="fw-bold mb-3"><i class="fa-solid fa-chart-column text-success me-2"></i>Quarterly Premium Inflow Trajectory (₹ Lakhs)</h6>
-              <div style="height: 300px;"><canvas id="chartPremium"></canvas></div>
+            <div class="card p-3 shadow-sm border-0 h-100">
+              <h6 class="fw-bold mb-3"><i class="fa-solid fa-gauge-high text-success me-2"></i>Solvency Ratio Trajectory vs 1.50x Statutory Floor</h6>
+              <div style="position: relative; height: 300px;">
+                <canvas id="chartSolvency"></canvas>
+              </div>
             </div>
           </div>
-
-          <!-- Business Scale Chart -->
           <div class="col-lg-6">
-            <div class="chart-container">
-              <h6 class="fw-bold mb-3"><i class="fa-solid fa-people-roof text-info me-2"></i>Policies Sold & Group Lives Growth</h6>
-              <div style="height: 300px;"><canvas id="chartScale"></canvas></div>
-            </div>
-          </div>
-
-          <!-- Solvency Trend Chart -->
-          <div class="col-lg-6">
-            <div class="chart-container">
-              <h6 class="fw-bold mb-3"><i class="fa-solid fa-shield-virus text-primary me-2"></i>Regulatory Solvency Ratio vs Statutory 1.50x Floor</h6>
-              <div style="height: 300px;"><canvas id="chartSolvency"></canvas></div>
-            </div>
-          </div>
-
-          <!-- Geographic Top States Chart -->
-          <div class="col-lg-6">
-            <div class="chart-container">
-              <h6 class="fw-bold mb-3"><i class="fa-solid fa-earth-asia text-warning me-2"></i>Top 8 States by Premium Collection (₹ Lakhs)</h6>
-              <div style="height: 300px;"><canvas id="chartGeo"></canvas></div>
+            <div class="card p-3 shadow-sm border-0 h-100">
+              <h6 class="fw-bold mb-3"><i class="fa-solid fa-map-location-dot text-warning me-2"></i>Top 5 Geographic States by Premium (₹ Lakhs)</h6>
+              <div style="position: relative; height: 300px;">
+                <canvas id="chartGeo"></canvas>
+              </div>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- TAB 2: STANDARDIZED 64 METRICS EXPLORER TABLE -->
-      <div class="tab-pane fade" id="content-metrics">
-        <div class="card p-0 shadow-sm border-0">
+      <!-- TAB 2: MULTI-COMPANY LEADERBOARD -->
+      <div class="tab-pane fade" id="content-leaderboard">
+        <div class="card p-3 shadow-sm border-0">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h6 class="fw-bold mb-0"><i class="fa-solid fa-trophy text-warning me-2"></i>Industry Multi-Company Benchmark & Market Share Ranking</h6>
+            <span class="badge bg-primary" id="leaderboardPeriodBadge">FY2024-25 Q4</span>
+          </div>
           <div class="table-container">
-            <table class="table table-sm table-striped table-hover mb-0" id="tableMetrics">
-              <thead>
-                <tr id="tableMetricsHead">
-                  <th style="min-width: 130px;">Period</th>
-                  <!-- Dynamic 64 Metric Columns -->
+            <table class="table table-hover mb-0" id="tableLeaderboard">
+              <thead class="table-dark">
+                <tr>
+                  <th>Rank</th>
+                  <th>Insurer Name</th>
+                  <th>Category</th>
+                  <th class="text-end">GWP (₹ Lakhs)</th>
+                  <th class="text-end">GWP (₹ Crores)</th>
+                  <th class="text-end">Market Share (%)</th>
+                  <th class="text-end">Total Policies</th>
+                  <th class="text-end">Sum Assured (₹ Cr)</th>
+                  <th class="text-end">Solvency Ratio</th>
                 </tr>
               </thead>
-              <tbody id="tableMetricsBody">
-                <!-- Loaded via JS -->
-              </tbody>
+              <tbody id="tableLeaderboardBody"></tbody>
             </table>
           </div>
         </div>
       </div>
 
-      <!-- TAB 3: GEOGRAPHICAL BREAKDOWN TABLE -->
+      <!-- TAB 3: 64 CURATED METRICS TABLE -->
+      <div class="tab-pane fade" id="content-metrics">
+        <div class="card p-3 shadow-sm border-0">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h6 class="fw-bold mb-0"><i class="fa-solid fa-table-list text-success me-2"></i>64 Standardized Curated Quarterly Metrics</h6>
+            <span class="badge bg-secondary" id="metricsRowCount">0 quarters</span>
+          </div>
+          <div class="table-container">
+            <table class="table table-sm table-hover mb-0" id="tableMetrics">
+              <thead>
+                <tr id="tableMetricsHead">
+                  <th style="min-width: 130px;">Period</th>
+                </tr>
+              </thead>
+              <tbody id="tableMetricsBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 4: GEOGRAPHICAL BREAKDOWN TABLE -->
       <div class="tab-pane fade" id="content-geo">
         <div class="card p-3 shadow-sm border-0">
           <div class="d-flex justify-content-between align-items-center mb-3">
@@ -391,7 +437,7 @@
         </div>
       </div>
 
-      <!-- TAB 4: PERSISTENCY COHORTS TABLE -->
+      <!-- TAB 5: PERSISTENCY COHORTS TABLE -->
       <div class="tab-pane fade" id="content-persistency">
         <div class="card p-3 shadow-sm border-0">
           <h6 class="fw-bold mb-3"><i class="fa-solid fa-user-clock text-warning me-2"></i>Actuarial Persistency Cohort Disclosures (Form L-22 & L-38)</h6>
@@ -412,7 +458,7 @@
         </div>
       </div>
 
-      <!-- TAB 5: CHANNELS & INTERMEDIARIES TABLE -->
+      <!-- TAB 6: CHANNELS & INTERMEDIARIES TABLE -->
       <div class="tab-pane fade" id="content-channels">
         <div class="card p-3 shadow-sm border-0">
           <h6 class="fw-bold mb-3"><i class="fa-solid fa-network-wired text-primary me-2"></i>Intermediary Distribution Channels & Productivity (Form L-38 & L-42)</h6>
@@ -425,7 +471,7 @@
                   <th class="text-end">Policies Count</th>
                   <th class="text-end">Premium (₹ Lakhs)</th>
                   <th class="text-end">Intermediaries / Staff</th>
-                  <th class="text-end">Productivity (INR)</th>
+                  <th class="text-end">Productivity (₹/Pol)</th>
                 </tr>
               </thead>
               <tbody id="tableChannelsBody"></tbody>
@@ -435,15 +481,109 @@
       </div>
 
     </div>
-
   </div>
 
-  <!-- Dashboard JavaScript Code -->
   <script>
-    let rawMetrics = [];
-    let geoData = [];
-    let persistencyData = [];
-    let channelsData = [];
+    // 64 Metric Metadata Definitions
+    const METRIC_DEFINITIONS = [
+      { id: 'm01', name: 'First Year Premium', cat: 'PREMIUMS' },
+      { id: 'm02', name: 'Total Single Premium', cat: 'PREMIUMS' },
+      { id: 'm03', name: 'Renewal Premium', cat: 'PREMIUMS' },
+      { id: 'm04', name: 'Total Individual Premium', cat: 'PREMIUMS' },
+      { id: 'm05', name: 'Total Group Premium', cat: 'PREMIUMS' },
+      { id: 'm06', name: 'Single Premium (Slab Rollup)', cat: 'PREMIUMS' },
+      { id: 'm07', name: 'Total Non-Single Premium', cat: 'PREMIUMS' },
+      { id: 'm08', name: 'Group Non-Single Premium', cat: 'PREMIUMS' },
+      { id: 'm09', name: 'Group Yearly Renewal Premium', cat: 'PREMIUMS' },
+      { id: 'm10', name: 'Individual Single Premium', cat: 'PREMIUMS' },
+      { id: 'm11', name: 'Individual Non-Single Premium', cat: 'PREMIUMS' },
+      { id: 'm12', name: 'Group Single Premium', cat: 'PREMIUMS' },
+      { id: 'm13', name: 'Gross Written Premium (GWP)', cat: 'PREMIUMS' },
+      { id: 'm14', name: 'Avg Premium Growth (%)', cat: 'PREMIUMS' },
+      { id: 'm15', name: 'Policy Sales Growth (%)', cat: 'PREMIUMS' },
+      { id: 'm16', name: 'Number of Claims Reported', cat: 'CLAIMS' },
+      { id: 'm17', name: 'Gross Death Claims Paid', cat: 'CLAIMS' },
+      { id: 'm18', name: 'Maturity Amount Paid', cat: 'CLAIMS' },
+      { id: 'm19', name: 'Total Claim Amount (Death + Maturity)', cat: 'CLAIMS' },
+      { id: 'm20', name: 'Commission Expense', cat: 'EXPENSES' },
+      { id: 'm21', name: 'Operating Expense (Opex)', cat: 'EXPENSES' },
+      { id: 'm22', name: 'Total Operating Expense', cat: 'EXPENSES' },
+      { id: 'm23', name: 'Compound Annual Growth (CAGR %)', cat: 'EXPENSES' },
+      { id: 'm24', name: 'Total Premium (Individual + Group)', cat: 'PREMIUMS' },
+      { id: 'm25', name: 'Total Sum Assured (₹ Lakhs)', cat: 'VOLUMES' },
+      { id: 'm26', name: 'Avg Sum Assured Growth (%)', cat: 'VOLUMES' },
+      { id: 'm27', name: 'Total Policies in Force', cat: 'VOLUMES' },
+      { id: 'm28', name: 'Avg Ticket Size (ATS in INR)', cat: 'VOLUMES' },
+      { id: 'm29', name: 'Group Lives Covered', cat: 'VOLUMES' },
+      { id: 'm30a', name: 'Market Share - Premium (%)', cat: 'VOLUMES' },
+      { id: 'm30b', name: 'Market Share - Sum Assured (%)', cat: 'VOLUMES' },
+      { id: 'm30c', name: 'Market Share - Policies (%)', cat: 'VOLUMES' },
+      { id: 'm31', name: 'Business Operating Surplus/Profit', cat: 'SOLVENCY' },
+      { id: 'm32a', name: 'Profit Before Tax (PBT)', cat: 'SOLVENCY' },
+      { id: 'm32b', name: 'Profit After Tax (PAT)', cat: 'SOLVENCY' },
+      { id: 'm33', name: 'AUM CAGR (%)', cat: 'SOLVENCY' },
+      { id: 'm34a', name: 'Linked AUM', cat: 'SOLVENCY' },
+      { id: 'm34b', name: 'Non-Linked AUM', cat: 'SOLVENCY' },
+      { id: 'm35', name: 'Regulatory Solvency Ratio', cat: 'SOLVENCY' },
+      { id: 'm36a', name: 'Group Policy Growth (%)', cat: 'VOLUMES' },
+      { id: 'm36b', name: 'Individual Policy Growth (%)', cat: 'VOLUMES' },
+      { id: 'm37', name: 'Policy Surrenders & Withdrawals', cat: 'EXPENSES' },
+      { id: 'm38', name: 'Conservation Ratio (%)', cat: 'EXPENSES' },
+      { id: 'm39', name: 'Total Grievances / Complaints', cat: 'EXPENSES' },
+      { id: 'm40', name: 'Total New Operation Policies (NOP)', cat: 'VOLUMES' },
+      { id: 'm41a', name: '13th Month Persistency (Count %)', cat: 'EXPENSES' },
+      { id: 'm41b', name: '13th Month Persistency (Prem %)', cat: 'EXPENSES' },
+      { id: 'm41c', name: '25th Month Persistency (Count %)', cat: 'EXPENSES' },
+      { id: 'm41d', name: '25th Month Persistency (Prem %)', cat: 'EXPENSES' },
+      { id: 'm41e', name: '37th Month Persistency (Count %)', cat: 'EXPENSES' },
+      { id: 'm41f', name: '37th Month Persistency (Prem %)', cat: 'EXPENSES' },
+      { id: 'm41g', name: '49th Month Persistency (Count %)', cat: 'EXPENSES' },
+      { id: 'm41h', name: '49th Month Persistency (Prem %)', cat: 'EXPENSES' },
+      { id: 'm41i', name: '61st Month Persistency (Count %)', cat: 'EXPENSES' },
+      { id: 'm41j', name: '61st Month Persistency (Prem %)', cat: 'EXPENSES' },
+      { id: 'm42a', name: 'Channel - Agency Premium', cat: 'CHANNELS' },
+      { id: 'm42b', name: 'Channel - Bancassurance Premium', cat: 'CHANNELS' },
+      { id: 'm42c', name: 'Channel - Broker Premium', cat: 'CHANNELS' },
+      { id: 'm42d', name: 'Channel - Direct Business Premium', cat: 'CHANNELS' },
+      { id: 'm42e', name: 'Channel - Web Aggregator Premium', cat: 'CHANNELS' },
+      { id: 'm42f', name: 'Channel - Other Intermediary Premium', cat: 'CHANNELS' },
+      { id: 'm43', name: 'Geographical Spread Summary', cat: 'CHANNELS' },
+      { id: 'm44', name: 'Major Banking Partners', cat: 'CHANNELS' },
+      { id: 'm45', name: 'Top Institutional Products', cat: 'CHANNELS' },
+      { id: 'm46', name: 'Number of Banca Partners', cat: 'CHANNELS' },
+      { id: 'm47', name: 'Number of Banca Branches', cat: 'CHANNELS' },
+      { id: 'm48', name: 'Bank Productivity (INR)', cat: 'CHANNELS' },
+      { id: 'm49', name: 'Number of Offices & Branches', cat: 'CHANNELS' },
+      { id: 'm50', name: 'Number of Web Aggregators', cat: 'CHANNELS' },
+      { id: 'm51', name: 'Number of Individual Agents', cat: 'CHANNELS' },
+      { id: 'm52', name: 'Agent Productivity (INR)', cat: 'CHANNELS' },
+      { id: 'm53', name: 'Number of Insurance Brokers', cat: 'CHANNELS' },
+      { id: 'm54', name: 'Broker Productivity (INR)', cat: 'CHANNELS' },
+      { id: 'm55a', name: 'Paid-Up Share Capital', cat: 'SOLVENCY' },
+      { id: 'm55b', name: 'Share Premium Account', cat: 'SOLVENCY' },
+      { id: 'm56', name: 'Profit / Loss Carried Forward', cat: 'SOLVENCY' },
+      { id: 'm57', name: 'Net Worth (Capital + Reserves)', cat: 'SOLVENCY' },
+      { id: 'm58', name: 'Average Return on Equity (ROE %)', cat: 'SOLVENCY' },
+      { id: 'm59', name: 'Product Mix (%)', cat: 'CHANNELS' },
+      { id: 'm60', name: 'Channel Wise Product Mix', cat: 'CHANNELS' },
+      { id: 'm61', name: 'Financial Performance JSON', cat: 'SOLVENCY' },
+      { id: 'm62', name: 'Embedded Value (EV)', cat: 'SOLVENCY' },
+      { id: 'm63', name: 'Value of New Business (VNB Growth %)', cat: 'SOLVENCY' },
+      { id: 'm64', name: 'Official Company Website Link', cat: 'CHANNELS' }
+    ];
+
+    let allCompanies = [];
+    let allMetrics = [];
+    let allGeo = [];
+    let allPersistency = [];
+    let allChannels = [];
+
+    let currentCompanyId = 'HDFC_LIFE';
+    let companyMetrics = [];
+    let companyGeo = [];
+    let companyPersistency = [];
+    let companyChannels = [];
+
     let chartInstances = {};
 
     async function initDashboard() {
@@ -456,26 +596,79 @@
           res = await fetch('api/all-data.json');
         }
         const data = await res.json();
-        rawMetrics = data.metrics;
-        geoData = data.geo;
-        persistencyData = data.persistency;
-        channelsData = data.channels;
+        allCompanies = data.companies || [];
+        allMetrics = data.metrics || [];
+        allGeo = data.geo || [];
+        allPersistency = data.persistency || [];
+        allChannels = data.channels || [];
 
-        renderKPICards("FY2025-26_Q4");
-        initCharts();
-        renderMetricsTable();
-        renderGeoTable();
-        renderPersistencyTable();
-        renderChannelsTable();
+        populateCompanyDropdown();
+        onCompanyChange();
       } catch (err) {
         console.error("Failed to load dashboard data:", err);
       }
     }
 
+    function populateCompanyDropdown() {
+      const select = document.getElementById('slicerCompany');
+      select.innerHTML = '';
+      allCompanies.forEach(c => {
+        const opt = document.createElement('option');
+        opt.value = c.company_id;
+        opt.textContent = `${c.company_name} (${c.irda_reg_no})`;
+        if (c.company_id === 'HDFC_LIFE') opt.selected = true;
+        select.appendChild(opt);
+      });
+      if (allCompanies.length > 0 && !allCompanies.some(c => c.company_id === 'HDFC_LIFE')) {
+        select.selectedIndex = 0;
+      }
+    }
+
+    function onCompanyChange() {
+      currentCompanyId = document.getElementById('slicerCompany').value;
+      const comp = allCompanies.find(c => c.company_id === currentCompanyId);
+
+      if (comp) {
+        document.getElementById('companyBadge').innerHTML = `
+          <span class="status-dot"></span> <b>${comp.company_name}</b> (Reg: ${comp.irda_reg_no}) &bull; ${comp.category || 'Private'}
+        `;
+      }
+
+      companyMetrics = allMetrics.filter(r => r.company_id === currentCompanyId);
+      companyGeo = allGeo.filter(r => r.company_id === currentCompanyId);
+      companyPersistency = allPersistency.filter(r => r.company_id === currentCompanyId);
+      companyChannels = allChannels.filter(r => r.company_id === currentCompanyId);
+
+      populatePeriodDropdown();
+      onPeriodChange();
+      renderLeaderboard();
+    }
+
+    function populatePeriodDropdown() {
+      const select = document.getElementById('slicerPeriod');
+      select.innerHTML = '';
+      
+      const optAll = document.createElement('option');
+      optAll.value = 'ALL';
+      optAll.textContent = `All Available Quarters (${companyMetrics.length} Quarters)`;
+      select.appendChild(optAll);
+
+      for (let i = companyMetrics.length - 1; i >= 0; i--) {
+        const pid = companyMetrics[i].period_id;
+        const opt = document.createElement('option');
+        opt.value = pid;
+        opt.textContent = `${pid.replace('_', ' ')} ${i === companyMetrics.length - 1 ? '(Latest)' : ''}`;
+        if (i === companyMetrics.length - 1) opt.selected = true;
+        select.appendChild(opt);
+      }
+    }
+
     function onPeriodChange() {
       const p = document.getElementById('slicerPeriod').value;
-      const targetP = (p === 'ALL') ? "FY2025-26_Q4" : p;
+      const latestPid = companyMetrics.length > 0 ? companyMetrics[companyMetrics.length - 1].period_id : null;
+      const targetP = (p === 'ALL') ? latestPid : p;
       renderKPICards(targetP);
+      updateCharts();
       renderMetricsTable();
       renderGeoTable();
       renderPersistencyTable();
@@ -487,7 +680,7 @@
     }
 
     function renderKPICards(periodId) {
-      const row = rawMetrics.find(r => r.period_id === periodId) || rawMetrics[rawMetrics.length - 1];
+      const row = companyMetrics.find(r => r.period_id === periodId) || companyMetrics[companyMetrics.length - 1];
       if (!row) return;
 
       document.getElementById('kpiGWP').textContent = '₹' + Number(row.m13_gross_written_premium || 0).toLocaleString() + ' L';
@@ -507,254 +700,320 @@
 
       document.getElementById('kpiClaims').textContent = '₹' + Number(row.m17_death_claims || 0).toLocaleString() + ' L';
       const nwCr = ((row.m57_net_worth || 0) / 100.0).toFixed(2);
-      document.getElementById('kpiNetWorth').textContent = '₹' + nwCr + ' Cr';
+      document.getElementById('kpiNetWorth').textContent = '₹' + Number(nwCr).toLocaleString() + ' Cr';
+      
+      const p13m = row.m41_persistency_13m_prem || row.m41_persistency_13m_count || 0;
+      document.getElementById('kpiPersistency').textContent = p13m ? p13m.toFixed(1) + '%' : 'N/A';
+      document.getElementById('kpiMarketShare').textContent = `Market Share: ${(row.m30a_market_share_prem_pct || 0).toFixed(2)}%`;
+
       document.getElementById('kpiComplaints').textContent = (row.m39_total_complaints || 0) + ' complaints';
     }
 
-    function initCharts() {
-      const labels = rawMetrics.map(r => r.period_id.replace('FY', '').replace('_', ' '));
-      const gwpData = rawMetrics.map(r => r.m13_gross_written_premium || 0);
-      const singleData = rawMetrics.map(r => r.m02_total_single_premium || 0);
-      const fyData = rawMetrics.map(r => r.m01_fy_premium || 0);
-      const polData = rawMetrics.map(r => r.m27_total_policies || 0);
-      const livesData = rawMetrics.map(r => r.m29_group_lives_covered || 0);
-      const solvencyData = rawMetrics.map(r => r.m35_solvency_ratio || 0);
+    function updateCharts() {
+      const labels = companyMetrics.map(r => r.period_id.replace('FY', '').replace('_', ' '));
+      const gwpData = companyMetrics.map(r => r.m13_gross_written_premium || 0);
+      const singleData = companyMetrics.map(r => r.m02_total_single_premium || 0);
+      const fyData = companyMetrics.map(r => r.m01_fy_premium || 0);
+      const polData = companyMetrics.map(r => r.m27_total_policies || 0);
+      const livesData = companyMetrics.map(r => r.m29_group_lives_covered || 0);
+      const solvencyData = companyMetrics.map(r => r.m35_solvency_ratio || 0);
 
       // 1. Premium Trajectory Chart
-      const ctxPrem = document.getElementById('chartPremium').getContext('2d');
-      chartInstances.prem = new Chart(ctxPrem, {
-        type: 'bar',
-        data: {
-          labels: labels,
-          datasets: [
-            { label: 'Gross Written Premium', data: gwpData, backgroundColor: '#0284c7', borderRadius: 4 },
-            { label: 'Single Premium', data: singleData, backgroundColor: '#38bdf8', borderRadius: 4 },
-            { label: 'First Year Premium', data: fyData, backgroundColor: '#10b981', borderRadius: 4 }
-          ]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: { legend: { position: 'top' } },
-          scales: { y: { beginAtZero: true, grid: { color: '#f1f5f9' } }, x: { grid: { display: false } } }
-        }
-      });
+      if (!chartInstances.prem) {
+        const ctxPrem = document.getElementById('chartPremium').getContext('2d');
+        chartInstances.prem = new Chart(ctxPrem, {
+          type: 'bar',
+          data: {
+            labels: labels,
+            datasets: [
+              { label: 'Gross Written Premium', data: gwpData, backgroundColor: '#0284c7', borderRadius: 4 },
+              { label: 'Single Premium', data: singleData, backgroundColor: '#38bdf8', borderRadius: 4 },
+              { label: 'First Year Premium', data: fyData, backgroundColor: '#10b981', borderRadius: 4 }
+            ]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { position: 'top' } },
+            scales: { y: { beginAtZero: true, grid: { color: '#f1f5f9' } }, x: { grid: { display: false } } }
+          }
+        });
+      } else {
+        chartInstances.prem.data.labels = labels;
+        chartInstances.prem.data.datasets[0].data = gwpData;
+        chartInstances.prem.data.datasets[1].data = singleData;
+        chartInstances.prem.data.datasets[2].data = fyData;
+        chartInstances.prem.update();
+      }
 
       // 2. Business Scale Chart
-      const ctxScale = document.getElementById('chartScale').getContext('2d');
-      chartInstances.scale = new Chart(ctxScale, {
-        type: 'line',
-        data: {
-          labels: labels,
-          datasets: [
-            { label: 'Group Lives Covered', data: livesData, borderColor: '#8b5cf6', backgroundColor: 'rgba(139, 92, 246, 0.1)', fill: true, tension: 0.3, yAxisID: 'y1' },
-            { label: 'Total Policies', data: polData, borderColor: '#f59e0b', backgroundColor: 'rgba(245, 158, 11, 0.1)', fill: false, tension: 0.3, yAxisID: 'y' }
-          ]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: { legend: { position: 'top' } },
-          scales: {
-            y: { type: 'linear', position: 'left', beginAtZero: true, grid: { color: '#f1f5f9' } },
-            y1: { type: 'linear', position: 'right', beginAtZero: true, grid: { display: false } }
+      if (!chartInstances.scale) {
+        const ctxScale = document.getElementById('chartScale').getContext('2d');
+        chartInstances.scale = new Chart(ctxScale, {
+          type: 'line',
+          data: {
+            labels: labels,
+            datasets: [
+              { label: 'Group Lives Covered', data: livesData, borderColor: '#8b5cf6', backgroundColor: 'rgba(139, 92, 246, 0.1)', fill: true, tension: 0.3, yAxisID: 'y1' },
+              { label: 'Total Policies', data: polData, borderColor: '#f59e0b', backgroundColor: 'rgba(245, 158, 11, 0.1)', fill: false, tension: 0.3, yAxisID: 'y' }
+            ]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { position: 'top' } },
+            scales: {
+              y: { type: 'linear', position: 'left', beginAtZero: true, grid: { color: '#f1f5f9' } },
+              y1: { type: 'linear', position: 'right', beginAtZero: true, grid: { display: false } }
+            }
           }
-        }
-      });
+        });
+      } else {
+        chartInstances.scale.data.labels = labels;
+        chartInstances.scale.data.datasets[0].data = livesData;
+        chartInstances.scale.data.datasets[1].data = polData;
+        chartInstances.scale.update();
+      }
 
-      // 3. Solvency Ratio Chart
-      const ctxSolv = document.getElementById('chartSolvency').getContext('2d');
-      chartInstances.solv = new Chart(ctxSolv, {
-        type: 'line',
-        data: {
-          labels: labels,
-          datasets: [
-            { label: 'Acko Solvency Ratio', data: solvencyData, borderColor: '#0ea5e9', backgroundColor: '#e0f2fe', tension: 0.2, pointRadius: 5 },
-            { label: 'Statutory Min (1.50x)', data: Array(labels.length).fill(1.50), borderColor: '#ef4444', borderDash: [6, 4], pointRadius: 0, fill: false }
-          ]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: { legend: { position: 'top' } },
-          scales: { y: { min: 1.0, max: 3.2, grid: { color: '#f1f5f9' } }, x: { grid: { display: false } } }
-        }
-      });
+      // 3. Solvency Health Chart
+      if (!chartInstances.solvency) {
+        const ctxSolv = document.getElementById('chartSolvency').getContext('2d');
+        chartInstances.solvency = new Chart(ctxSolv, {
+          type: 'line',
+          data: {
+            labels: labels,
+            datasets: [
+              { label: 'Reported Solvency Ratio', data: solvencyData, borderColor: '#10b981', backgroundColor: '#10b981', pointRadius: 5, tension: 0.2 },
+              { label: 'IRDAI Statutory Floor (1.50x)', data: Array(labels.length).fill(1.5), borderColor: '#ef4444', borderDash: [6, 6], pointRadius: 0, fill: false }
+            ]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { position: 'top' } },
+            scales: { y: { min: 0, max: Math.max(3.5, ...solvencyData) + 0.5, grid: { color: '#f1f5f9' } }, x: { grid: { display: false } } }
+          }
+        });
+      } else {
+        chartInstances.solvency.data.labels = labels;
+        chartInstances.solvency.data.datasets[0].data = solvencyData;
+        chartInstances.solvency.data.datasets[1].data = Array(labels.length).fill(1.5);
+        chartInstances.solvency.options.scales.y.max = Math.max(3.5, ...solvencyData) + 0.5;
+        chartInstances.solvency.update();
+      }
 
-      // 4. Geographic Top States Chart (FY25-26 Q4)
-      const latestGeo = geoData.filter(g => g.period_id === 'FY2025-26_Q4' && g.region_name !== 'TOTAL' && g.region_name !== 'GRAND TOTAL')
-                               .sort((a,b) => b.total_premium_lakhs - a.total_premium_lakhs)
-                               .slice(0, 8);
-      const ctxGeo = document.getElementById('chartGeo').getContext('2d');
-      chartInstances.geo = new Chart(ctxGeo, {
-        type: 'bar',
-        data: {
-          labels: latestGeo.map(g => g.region_name),
-          datasets: [{ label: 'Premium Collection (₹ Lakhs)', data: latestGeo.map(g => g.total_premium_lakhs), backgroundColor: '#f59e0b', borderRadius: 4 }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          indexAxis: 'y',
-          plugins: { legend: { display: false } },
-          scales: { x: { beginAtZero: true, grid: { color: '#f1f5f9' } } }
-        }
+      // 4. Geographic States Chart
+      const p = document.getElementById('slicerPeriod').value;
+      const targetP = (p === 'ALL' && companyMetrics.length > 0) ? companyMetrics[companyMetrics.length - 1].period_id : p;
+      const stateRows = companyGeo.filter(g => g.period_id === targetP && g.region_type === 'STATE').slice(0, 5);
+      const stateLabels = stateRows.map(r => r.region_name);
+      const statePrem = stateRows.map(r => r.total_premium_lakhs || 0);
+
+      if (!chartInstances.geo) {
+        const ctxGeo = document.getElementById('chartGeo').getContext('2d');
+        chartInstances.geo = new Chart(ctxGeo, {
+          type: 'bar',
+          data: {
+            labels: stateLabels,
+            datasets: [{ label: 'State Total Premium (₹ Lakhs)', data: statePrem, backgroundColor: '#f59e0b', borderRadius: 4 }]
+          },
+          options: {
+            indexAxis: 'y',
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: { x: { beginAtZero: true, grid: { color: '#f1f5f9' } }, y: { grid: { display: false } } }
+          }
+        });
+      } else {
+        chartInstances.geo.data.labels = stateLabels;
+        chartInstances.geo.data.datasets[0].data = statePrem;
+        chartInstances.geo.update();
+      }
+    }
+
+    function renderLeaderboard() {
+      const p = document.getElementById('slicerPeriod').value;
+      const latestPid = companyMetrics.length > 0 ? companyMetrics[companyMetrics.length - 1].period_id : 'FY2024-25_Q4';
+      const targetP = (p === 'ALL') ? latestPid : p;
+      document.getElementById('leaderboardPeriodBadge').textContent = targetP.replace('_', ' ');
+
+      const periodMetrics = allMetrics.filter(m => m.period_id === targetP);
+      periodMetrics.sort((a, b) => (b.m13_gross_written_premium || 0) - (a.m13_gross_written_premium || 0));
+
+      const tbody = document.getElementById('tableLeaderboardBody');
+      tbody.innerHTML = '';
+
+      periodMetrics.forEach((m, idx) => {
+        const comp = allCompanies.find(c => c.company_id === m.company_id) || { company_name: m.company_id, category: 'Private' };
+        const gwpL = Number(m.m13_gross_written_premium || 0);
+        const gwpCr = (gwpL / 100.0).toFixed(2);
+        const saCr = ((m.m25_total_sum_assured || 0) / 100.0).toFixed(2);
+        const ms = (m.m30a_market_share_prem_pct || 0).toFixed(2);
+
+        const tr = document.createElement('tr');
+        if (m.company_id === currentCompanyId) tr.className = 'table-primary fw-bold';
+        tr.innerHTML = `
+          <td><span class="badge ${idx === 0 ? 'bg-warning text-dark' : 'bg-secondary'} rounded-circle">${idx + 1}</span></td>
+          <td><b>${comp.company_name}</b></td>
+          <td><span class="badge bg-light text-dark border">${comp.category || 'Private'}</span></td>
+          <td class="text-end">₹${gwpL.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} L</td>
+          <td class="text-end fw-bold">₹${Number(gwpCr).toLocaleString()} Cr</td>
+          <td class="text-end"><span class="badge bg-info-subtle text-info">${ms}%</span></td>
+          <td class="text-end">${Number(m.m27_total_policies || 0).toLocaleString()}</td>
+          <td class="text-end">₹${Number(saCr).toLocaleString()} Cr</td>
+          <td class="text-end"><span class="badge ${m.m35_solvency_ratio >= 1.5 ? 'bg-success' : 'bg-danger'}">${(m.m35_solvency_ratio || 0).toFixed(2)}x</span></td>
+        `;
+        tbody.appendChild(tr);
       });
     }
 
     function renderMetricsTable() {
-      const pSlicer = document.getElementById('slicerPeriod').value;
-      const catSlicer = document.getElementById('slicerCategory').value;
+      const cat = document.getElementById('slicerCategory').value;
+      const filteredDefs = (cat === 'ALL') ? METRIC_DEFINITIONS : METRIC_DEFINITIONS.filter(d => d.cat === cat);
 
-      let filteredRows = (pSlicer === 'ALL') ? rawMetrics : rawMetrics.filter(r => r.period_id === pSlicer);
-      
-      const head = document.getElementById('tableMetricsHead');
-      const body = document.getElementById('tableMetricsBody');
-      head.innerHTML = '<th style="min-width: 140px;">Period</th>';
-      body.innerHTML = '';
-
-      if (filteredRows.length === 0) {
-        body.innerHTML = '<tr><td colspan="10" class="text-center py-4 text-muted">No records match slicers.</td></tr>';
-        return;
-      }
-
-      // Filter columns based on category
-      const allCols = Object.keys(filteredRows[0]).filter(k => k.startsWith('m'));
-      let selectedCols = allCols;
-
-      if (catSlicer === 'PREMIUMS') {
-        selectedCols = allCols.filter(k => parseInt(k.substring(1,3)) <= 15 || k.includes('m24'));
-      } else if (catSlicer === 'VOLUMES') {
-        selectedCols = allCols.filter(k => parseInt(k.substring(1,3)) >= 25 && parseInt(k.substring(1,3)) <= 30);
-      } else if (catSlicer === 'CLAIMS') {
-        selectedCols = allCols.filter(k => (parseInt(k.substring(1,3)) >= 16 && parseInt(k.substring(1,3)) <= 22) || k.includes('m37'));
-      } else if (catSlicer === 'SOLVENCY') {
-        selectedCols = allCols.filter(k => (parseInt(k.substring(1,3)) >= 31 && parseInt(k.substring(1,3)) <= 35) || (parseInt(k.substring(1,3)) >= 55 && parseInt(k.substring(1,3)) <= 58));
-      } else if (catSlicer === 'CHANNELS') {
-        selectedCols = allCols.filter(k => k.includes('m42') || (parseInt(k.substring(1,3)) >= 46 && parseInt(k.substring(1,3)) <= 54));
-      }
-
-      // Populate headers
-      selectedCols.forEach(col => {
+      const thead = document.getElementById('tableMetricsHead');
+      thead.innerHTML = '<th style="min-width: 130px;">Period</th>';
+      filteredDefs.forEach(d => {
         const th = document.createElement('th');
-        const metricNum = col.substring(0, 3).toUpperCase();
-        const metricName = col.substring(4).replace(/_/g, ' ');
-        th.innerHTML = `<span class="badge-metric-id">${metricNum}</span> ${metricName}`;
-        head.appendChild(th);
+        th.innerHTML = `<span class="badge-metric-id me-1">${d.id.toUpperCase()}</span>${d.name}`;
+        thead.appendChild(th);
       });
 
-      // Populate body
-      filteredRows.forEach(r => {
+      const p = document.getElementById('slicerPeriod').value;
+      const displayRows = (p === 'ALL') ? companyMetrics : companyMetrics.filter(r => r.period_id === p);
+      document.getElementById('metricsRowCount').textContent = `${displayRows.length} quarters`;
+
+      const tbody = document.getElementById('tableMetricsBody');
+      tbody.innerHTML = '';
+
+      displayRows.forEach(row => {
         const tr = document.createElement('tr');
-        const tdP = document.createElement('td');
-        tdP.className = 'fw-bold text-primary';
-        tdP.textContent = r.period_id;
-        tr.appendChild(tdP);
-
-        selectedCols.forEach(col => {
-          const td = document.createElement('td');
-          const val = r[col];
-          if (typeof val === 'number') {
-            td.textContent = val.toLocaleString(undefined, { maximumFractionDigits: 2 });
-            td.style.textAlign = 'right';
-          } else {
-            td.textContent = (val !== null && val !== undefined) ? val : '-';
+        let html = `<td class="fw-bold">${row.period_id.replace('_', ' ')}</td>`;
+        filteredDefs.forEach(d => {
+          let val = row[d.id];
+          if (val === undefined) {
+            const matchKey = Object.keys(row).find(k => k.startsWith(d.id + '_') || k === d.id);
+            val = matchKey ? row[matchKey] : null;
           }
-          tr.appendChild(td);
+          if (val === null || val === undefined || val === '') {
+            html += `<td class="text-muted text-center">-</td>`;
+          } else if (typeof val === 'number') {
+            html += `<td class="text-end">${Number(val).toLocaleString(undefined, { maximumFractionDigits: 2 })}</td>`;
+          } else {
+            html += `<td title="${String(val).replace(/"/g, '&quot;')}">${String(val).slice(0, 30)}${String(val).length > 30 ? '...' : ''}</td>`;
+          }
         });
-        body.appendChild(tr);
+        tr.innerHTML = html;
+        tbody.appendChild(tr);
       });
+      filterTable();
     }
 
     function renderGeoTable() {
-      const pSlicer = document.getElementById('slicerPeriod').value;
-      let rows = (pSlicer === 'ALL') ? geoData : geoData.filter(g => g.period_id === pSlicer);
-      document.getElementById('geoRowCount').textContent = rows.length + ' records';
-      const body = document.getElementById('tableGeoBody');
-      body.innerHTML = '';
+      const p = document.getElementById('slicerPeriod').value;
+      const displayRows = (p === 'ALL') ? companyGeo : companyGeo.filter(r => r.period_id === p);
+      document.getElementById('geoRowCount').textContent = `${displayRows.length} records`;
 
-      rows.slice(0, 200).forEach(r => {
+      const tbody = document.getElementById('tableGeoBody');
+      tbody.innerHTML = '';
+      displayRows.forEach(r => {
         const tr = document.createElement('tr');
         tr.innerHTML = `
-          <td><span class="badge bg-light text-dark">${r.period_id}</span></td>
-          <td>${r.region_type}</td>
+          <td>${r.period_id.replace('_', ' ')}</td>
+          <td><span class="badge bg-light text-dark border">${r.region_type}</span></td>
           <td class="fw-semibold">${r.region_name}</td>
           <td class="text-end">${Number(r.total_policies || 0).toLocaleString()}</td>
-          <td class="text-end fw-bold text-success">₹${Number(r.total_premium_lakhs || 0).toLocaleString()}</td>
-          <td class="text-end text-muted">₹${Number(r.total_sum_assured_lakhs || 0).toLocaleString()}</td>
-          <td class="text-end">${Number(r.rural_policies || 0).toLocaleString()}</td>
-          <td class="text-end">${Number(r.urban_policies || 0).toLocaleString()}</td>
+          <td class="text-end fw-bold">₹${Number(r.total_premium_lakhs || 0).toLocaleString()}</td>
+          <td class="text-end">₹${Number(r.total_sum_assured_lakhs || 0).toLocaleString()}</td>
+          <td class="text-end text-muted">${Number(r.rural_policies || 0).toLocaleString()}</td>
+          <td class="text-end text-muted">${Number(r.urban_policies || 0).toLocaleString()}</td>
         `;
-        body.appendChild(tr);
+        tbody.appendChild(tr);
       });
     }
 
     function renderPersistencyTable() {
-      const pSlicer = document.getElementById('slicerPeriod').value;
-      let rows = (pSlicer === 'ALL') ? persistencyData : persistencyData.filter(p => p.period_id === pSlicer);
-      const body = document.getElementById('tablePersistencyBody');
-      body.innerHTML = '';
+      const p = document.getElementById('slicerPeriod').value;
+      const displayRows = (p === 'ALL') ? companyPersistency : companyPersistency.filter(r => r.period_id === p);
 
-      rows.forEach(r => {
+      const tbody = document.getElementById('tablePersistencyBody');
+      tbody.innerHTML = '';
+      displayRows.forEach(r => {
         const tr = document.createElement('tr');
         tr.innerHTML = `
-          <td><span class="badge bg-light text-dark">${r.period_id}</span></td>
-          <td class="fw-bold">${r.cohort_month} Month</td>
-          <td>${r.premium_basis_type}</td>
+          <td>${r.period_id.replace('_', ' ')}</td>
+          <td class="fw-bold">${r.cohort_month}th Month</td>
+          <td><span class="badge bg-info-subtle text-info">${r.premium_basis_type}</span></td>
           <td>${r.basis_metric}</td>
-          <td class="text-end fw-bold text-primary">${(r.persistency_ratio_pct !== null) ? (r.persistency_ratio_pct > 1 ? r.persistency_ratio_pct : r.persistency_ratio_pct * 100).toFixed(1) + '%' : '-'}</td>
+          <td class="text-end fw-bold text-success">${Number(r.persistency_ratio_pct || 0).toFixed(2)}%</td>
         `;
-        body.appendChild(tr);
+        tbody.appendChild(tr);
       });
     }
 
     function renderChannelsTable() {
-      const pSlicer = document.getElementById('slicerPeriod').value;
-      let rows = (pSlicer === 'ALL') ? channelsData : channelsData.filter(c => c.period_id === pSlicer);
-      const body = document.getElementById('tableChannelsBody');
-      body.innerHTML = '';
+      const p = document.getElementById('slicerPeriod').value;
+      const displayRows = (p === 'ALL') ? companyChannels : companyChannels.filter(r => r.period_id === p);
 
-      rows.forEach(r => {
+      const tbody = document.getElementById('tableChannelsBody');
+      tbody.innerHTML = '';
+      displayRows.forEach(r => {
         const tr = document.createElement('tr');
         tr.innerHTML = `
-          <td><span class="badge bg-light text-dark">${r.period_id}</span></td>
-          <td class="fw-semibold text-primary">${r.channel_name}</td>
+          <td>${r.period_id.replace('_', ' ')}</td>
+          <td class="fw-bold">${r.channel_name}</td>
           <td class="text-end">${Number(r.policies_count || 0).toLocaleString()}</td>
-          <td class="text-end fw-bold text-success">₹${Number(r.premium_lakhs || 0).toLocaleString()}</td>
-          <td class="text-end">${Number(r.intermediary_count || 0).toLocaleString()}</td>
-          <td class="text-end text-muted">₹${Number(r.productivity_inr || 0).toLocaleString()}</td>
+          <td class="text-end fw-bold">₹${Number(r.premium_lakhs || 0).toLocaleString()}</td>
+          <td class="text-end">${r.intermediary_count || '-'}</td>
+          <td class="text-end text-primary fw-semibold">₹${Number(r.productivity_inr || 0).toLocaleString()}</td>
         `;
-        body.appendChild(tr);
+        tbody.appendChild(tr);
       });
     }
 
     function filterTable() {
       const query = document.getElementById('metricSearch').value.toLowerCase();
-      const ths = document.getElementById('tableMetricsHead').getElementsByTagName('th');
-      const trs = document.getElementById('tableMetricsBody').getElementsByTagName('tr');
+      const headers = document.querySelectorAll('#tableMetricsHead th');
+      const rows = document.querySelectorAll('#tableMetricsBody tr');
 
-      for (let i = 1; i < ths.length; i++) {
-        const colText = ths[i].textContent.toLowerCase();
-        const show = colText.includes(query);
-        ths[i].style.display = show ? '' : 'none';
-        for (let r = 0; r < trs.length; r++) {
-          const tds = trs[r].getElementsByTagName('td');
-          if (tds[i]) tds[i].style.display = show ? '' : 'none';
-        }
+      if (!query) {
+        headers.forEach(h => h.style.display = '');
+        rows.forEach(r => {
+          Array.from(r.children).forEach(td => td.style.display = '');
+        });
+        return;
       }
+
+      const visibleColIdx = [0];
+      headers.forEach((h, idx) => {
+        if (idx === 0) return;
+        if (h.textContent.toLowerCase().includes(query)) {
+          visibleColIdx.push(idx);
+          h.style.display = '';
+        } else {
+          h.style.display = 'none';
+        }
+      });
+
+      rows.forEach(r => {
+        Array.from(r.children).forEach((td, idx) => {
+          td.style.display = visibleColIdx.includes(idx) ? '' : 'none';
+        });
+      });
     }
 
     function exportTableToCSV() {
-      if (!rawMetrics || rawMetrics.length === 0) return;
-      const keys = Object.keys(rawMetrics[0]);
-      let csv = keys.join(",") + "\\n";
-      rawMetrics.forEach(row => {
-        csv += keys.map(k => '"' + String(row[k] !== null ? row[k] : '').replace(/"/g, '""') + '"').join(",") + "\\n";
+      if (!companyMetrics || companyMetrics.length === 0) return;
+      const keys = Object.keys(companyMetrics[0]);
+      let csv = keys.join(",") + "\n";
+      companyMetrics.forEach(row => {
+        csv += keys.map(k => '"' + String(row[k] !== null ? row[k] : '').replace(/"/g, '""') + '"').join(",") + "\n";
       });
       const blob = new Blob([csv], { type: 'text/csv' });
       const a = document.createElement('a');
       a.href = URL.createObjectURL(blob);
-      a.download = "acko_64_metrics_export.csv";
+      a.download = `${currentCompanyId.toLowerCase()}_64_metrics_export.csv`;
       a.click();
     }
 
