@@ -39,50 +39,57 @@ class CuratedDashboardHandler(BaseHTTPRequestHandler):
             self.wfile.write(content.encode("utf-8"))
 
         elif url.path in ("/api/all-data", "/api/all-data.json"):
-            conn = sqlite3.connect(DB_PATH)
-            conn.row_factory = sqlite3.Row
-            cur = conn.cursor()
+            json_cache_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "api", "all-data.json")
+            if os.path.exists(json_cache_path):
+                with open(json_cache_path, "rb") as f:
+                    payload = f.read()
+            else:
+                conn = sqlite3.connect(DB_PATH)
+                conn.row_factory = sqlite3.Row
+                cur = conn.cursor()
 
-            cur.execute("SELECT * FROM v_all_64_metrics ORDER BY company_id, period_id")
-            metrics = [dict(r) for r in cur.fetchall()]
+                cur.execute("SELECT * FROM v_all_64_metrics ORDER BY company_id, period_id")
+                metrics = [dict(r) for r in cur.fetchall()]
 
-            cur.execute("""
-                SELECT company_id, period_id, region_type, region_name, total_policies, total_premium_lakhs, 
-                       total_sum_assured_lakhs, rural_policies, urban_policies 
-                FROM fact_geographical_distribution 
-                ORDER BY company_id, period_id, total_premium_lakhs DESC
-            """)
-            geo = [dict(r) for r in cur.fetchall()]
+                cur.execute("""
+                    SELECT company_id, period_id, region_type, region_name, total_policies, total_premium_lakhs, 
+                           total_sum_assured_lakhs, rural_policies, urban_policies 
+                    FROM fact_geographical_distribution 
+                    ORDER BY company_id, period_id, total_premium_lakhs DESC
+                """)
+                geo = [dict(r) for r in cur.fetchall()]
 
-            cur.execute("""
-                SELECT company_id, period_id, cohort_month, premium_basis_type, basis_metric, persistency_ratio_pct 
-                FROM fact_persistency_cohorts 
-                ORDER BY company_id, period_id, cohort_month
-            """)
-            persistency = [dict(r) for r in cur.fetchall()]
+                cur.execute("""
+                    SELECT company_id, period_id, cohort_month, premium_basis_type, basis_metric, persistency_ratio_pct 
+                    FROM fact_persistency_cohorts 
+                    ORDER BY company_id, period_id, cohort_month
+                """)
+                persistency = [dict(r) for r in cur.fetchall()]
 
-            cur.execute("""
-                SELECT company_id, period_id, channel_name, policies_count, premium_lakhs, intermediary_count, productivity_inr 
-                FROM fact_intermediary_channel_metrics 
-                ORDER BY company_id, period_id, premium_lakhs DESC
-            """)
-            channels = [dict(r) for r in cur.fetchall()]
+                cur.execute("""
+                    SELECT company_id, period_id, channel_name, policies_count, premium_lakhs, intermediary_count, productivity_inr 
+                    FROM fact_intermediary_channel_metrics 
+                    ORDER BY company_id, period_id, premium_lakhs DESC
+                """)
+                channels = [dict(r) for r in cur.fetchall()]
 
-            cur.execute("SELECT company_id, company_name, short_name, irda_reg_no, category FROM dim_company ORDER BY company_name")
-            companies = [dict(r) for r in cur.fetchall()]
+                cur.execute("SELECT company_id, company_name, short_name, irda_reg_no, category FROM dim_company ORDER BY company_name")
+                companies = [dict(r) for r in cur.fetchall()]
 
-            conn.close()
+                conn.close()
+                payload = json.dumps({
+                    "companies": companies,
+                    "metrics": metrics,
+                    "geo": geo,
+                    "persistency": persistency,
+                    "channels": channels
+                }).encode("utf-8")
 
             self.send_response(200)
             self.send_header("Content-Type", "application/json")
+            self.send_header("Access-Control-Allow-Origin", "*")
             self.end_headers()
-            self.wfile.write(json.dumps({
-                "companies": companies,
-                "metrics": metrics,
-                "geo": geo,
-                "persistency": persistency,
-                "channels": channels
-            }).encode("utf-8"))
+            self.wfile.write(payload)
         else:
             self.send_response(404)
             self.end_headers()
