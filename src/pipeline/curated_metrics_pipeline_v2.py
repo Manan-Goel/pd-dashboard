@@ -1,11 +1,8 @@
 """
 Curated Life Insurance Pipeline V2 (High-Performance & Universal Multi-Company Ingestion).
 Supports ACKO, HDFC, LIC, CANARA HSBC, ICICI PRUDENTIAL, and SBI LIFE.
-Ingests:
-- fact_company_quarterly_metrics (Master wide table, 64 standardized metrics)
-- fact_geographical_distribution (State/UT/NRI rural vs urban spread)
-- fact_persistency_cohorts (13m - 61m persistency cohorts)
-- fact_intermediary_channel_metrics (Channels & productivity)
+Features rigorous cell-level empirical resolution, multi-tier unit normalization,
+and statutory fallback handling (e.g. Form L-32 Solvency Margin for LIC).
 """
 
 import os
@@ -66,7 +63,7 @@ def clean_val(v) -> float:
     if v is None:
         return 0.0
     s = str(v).strip().replace(',', '')
-    if s in ('', '-', 'NA', 'Nil', 'NIL', '.', 'None'):
+    if s in ('', '-', 'NA', 'Nil', 'NIL', '.', 'None', '#', '*'):
         return 0.0
     try:
         return float(s)
@@ -112,14 +109,14 @@ def scan_quarter_blocks_rows(rows: List[Tuple]) -> List[Dict[str, Any]]:
 def detect_unit_multiplier(rows: List[Tuple], sc: int, ec: int) -> float:
     """Detects monetary unit multiplier (to convert to INR Lakhs) within a quarter block."""
     headers = []
-    for r in range(min(12, len(rows))):
+    for r in range(min(16, len(rows))):
         for c in range(sc, min(ec + 1, len(rows[r]))):
             v = rows[r][c]
             if v is not None:
                 headers.append(str(v))
     txt = " ".join(headers).lower()
     
-    if "'000" in txt or "thousand" in txt:
+    if "'000" in txt or "thousand" in txt or "` 000" in txt:
         return 0.01
     elif "crore" in txt or "crs" in txt:
         return 100.0
@@ -137,7 +134,7 @@ class CuratedMetricsPipelineV2:
         print(f"=======================================================")
         
         # 1. Fast read_only load of relevant sheets into memory
-        schedules = ['L-1', 'L-2', 'L-4', 'L-7', 'L-8', 'L-9', 'L-22', 'L-25 (i)', 'L-36', 'L-38', 'L-41', 'L-45']
+        schedules = ['L-1', 'L-2', 'L-4', 'L-7', 'L-8', 'L-9', 'L-22', 'L-25 (i)', 'L-32', 'L-36', 'L-38', 'L-41', 'L-45']
         wb = openpyxl.load_workbook(file_path, read_only=True, data_only=True)
         sheet_data: Dict[str, List[Tuple]] = {}
         for s in schedules:
@@ -206,7 +203,7 @@ class CuratedMetricsPipelineV2:
                         if c == part_col: continue
                         for r in range(6, min(14, len(rows))):
                             txt = re.sub(r'\s+', ' ', str(rows[r][c] or '').strip().lower())
-                            if ('for the quarter' in txt or 'up to the quarter' in txt) and 'previous' not in txt and 'corresponding' not in txt:
+                            if ('for the quarter' in txt or 'up to the quarter' in txt or 'quarter ended' in txt) and 'previous' not in txt and 'corresponding' not in txt:
                                 total_col = c
                                 break
                         if total_col is not None: break
@@ -362,24 +359,71 @@ class CuratedMetricsPipelineV2:
                 sc, ec = b['start_col'], b['end_col']
                 mult = detect_unit_multiplier(rows, sc, ec)
 
-                gt_col = ec
+                part_col = None
                 for c in range(sc, ec + 1):
-                    for r in range(8, min(15, len(rows))):
-                        txt = re.sub(r'\s+', ' ', str(rows[r][c] or '').strip().lower())
-                        if 'grand total' in txt or txt == 'total':
-                            gt_col = c
+                    for r in range(6, min(14, len(rows))):
+                        txt = str(rows[r][c] or '').strip().lower()
+                        if 'particular' in txt and part_col is None:
+                            part_col = c
                             break
+                    if part_col is not None: break
+                if part_col is None: part_col = sc
 
+                total_col = None
+                # Check for explicit Grand Total or Total Policyholder Fund
+                for c in range(sc, ec + 1):
+                    if c == part_col: continue
+                    for r in range(6, min(14, len(rows))):
+                        txt = re.sub(r'\s+', ' ', str(rows[r][c] or '').strip().lower())
+                        if 'grand total' in txt or 'total policyholder' in txt or txt == 'total':
+                            total_col = c
+                            break
+                    if total_col is not None: break
+
+                if total_col is None:
+                    for c in range(sc, ec + 1):
+                        if c == part_col: continue
+                        for r in range(6, min(14, len(rows))):
+                            txt = re.sub(r'\s+', ' ', str(rows[r][c] or '').strip().lower())
+                            if ('for the quarter' in txt or 'up to the quarter' in txt or 'quarter ended' in txt) and 'previous' not in txt and 'corresponding' not in txt:
+                                total_col = c
+                                break
+                        if total_col is not None: break
+
+                if total_col is None: total_col = ec
+
+                # Magnitude check for L-1
+                for r in range(12, min(30, len(rows))):
+                    v = str(rows[r][total_col] if total_col < len(rows[r]) else '')
+                    try:
+                        fv = float(v.replace(',', ''))
+                        if fv > 5000000.0 and mult == 1.0:
+                            mult = 0.01
+                            break
+                    except: pass
+
+                comm_found = False
                 for r in range(10, len(rows)):
-                    line = str(rows[r][sc] or '').strip().lower() if sc < len(rows[r]) else ''
-                    if not line and sc + 1 < len(rows[r]):
-                        line = str(rows[r][sc + 1] or '').strip().lower()
-                    val = round(clean_val(rows[r][gt_col] if gt_col < len(rows[r]) else None) * mult, 4)
-                    if 'commission' in line and 'gross' not in line:
-                        metrics[pid]['comm_expense'] = val
+                    line = str(rows[r][part_col] or '').strip().lower() if part_col < len(rows[r]) else ''
+                    raw_val = clean_val(rows[r][total_col] if total_col < len(rows[r]) else None)
+                    val = round(raw_val * mult, 4)
+
+                    if 'commission' in line and 'gross' not in line and not comm_found:
+                        if val > 0:
+                            metrics[pid]['comm_expense'] = val
+                            comm_found = True
+                        else:
+                            # Search next 8 rows for Sub Total
+                            for r_sub in range(r + 1, min(r + 8, len(rows))):
+                                sub_line = str(rows[r_sub][part_col] or '').strip().lower()
+                                sub_val = round(clean_val(rows[r_sub][total_col] if total_col < len(rows[r_sub]) else None) * mult, 4)
+                                if 'sub total' in sub_line and sub_val > 0:
+                                    metrics[pid]['comm_expense'] = sub_val
+                                    comm_found = True
+                                    break
                     elif 'operating expenses' in line:
                         metrics[pid]['opex_expense'] = val
-                    elif 'surrenders' in line:
+                    elif 'surrender' in line:
                         metrics[pid]['surrenders'] = val
                     elif 'surplus' in line or 'deficit' in line or 'transferred to shareholders' in line:
                         if 'business_profit' not in metrics[pid]:
@@ -396,24 +440,46 @@ class CuratedMetricsPipelineV2:
                 sc, ec = b['start_col'], b['end_col']
                 mult = detect_unit_multiplier(rows, sc, ec)
 
-                part_col, q_col = None, None
+                part_col = None
                 for c in range(sc, ec + 1):
                     for r in range(8, min(14, len(rows))):
                         txt = re.sub(r'\s+', ' ', str(rows[r][c] or '').strip().lower())
-                        if 'particular' in txt and not part_col: part_col = c
-                        if ('for the quarter' in txt or 'up to the quarter' in txt) and 'previous' not in txt and 'corresponding' not in txt:
-                            if not q_col: q_col = c
-                if not part_col: part_col = sc
-                if not q_col: q_col = sc + 2
+                        if 'particular' in txt and part_col is None: part_col = c; break
+                    if part_col is not None: break
+                if part_col is None: part_col = sc
+
+                q_col = None
+                for c in range(sc, ec + 1):
+                    if c == part_col: continue
+                    for r in range(8, min(14, len(rows))):
+                        txt = re.sub(r'\s+', ' ', str(rows[r][c] or '').strip().lower())
+                        if ('for the quarter' in txt or 'up to the quarter' in txt or 'quarter ended' in txt) and 'previous' not in txt and 'corresponding' not in txt:
+                            q_col = c; break
+                    if q_col is not None: break
+
+                if q_col is None:
+                    q_col = part_col + 2 if part_col + 2 <= ec else part_col + 1
+
+                # Magnitude check for L-2
+                for r in range(12, min(35, len(rows))):
+                    v = str(rows[r][q_col] if q_col < len(rows[r]) else '')
+                    try:
+                        fv = abs(float(v.replace(',', '')))
+                        if fv > 5000000.0 and mult == 1.0:
+                            mult = 0.01
+                            break
+                    except: pass
 
                 for r in range(10, len(rows)):
                     line = str(rows[r][part_col] or '').strip().lower() if part_col < len(rows[r]) else ''
                     val = round(clean_val(rows[r][q_col] if q_col < len(rows[r]) else None) * mult, 4)
-                    if 'profit before tax' in line:
+                    norm_line = re.sub(r'[\(\)/]+', ' ', line)
+
+                    if re.search(r'(?:profit|loss).*before tax', norm_line):
                         metrics[pid]['profit_before_tax'] = val
-                    elif 'profit after tax' in line or 'loss after tax' in line or 'profit / (loss) after tax' in line:
+                    elif re.search(r'(?:profit|loss).*after tax', norm_line):
                         metrics[pid]['profit_after_tax'] = val
-                    elif 'balance' in line and ('brought forward' in line or 'carried forward' in line or 'carried to balance' in line):
+                    elif 'balance' in norm_line and ('brought forward' in norm_line or 'carried forward' in norm_line or 'carried to balance' in norm_line):
                         metrics[pid]['profit_loss_carried_forward'] = val
 
         # ----------------------------------------------------
@@ -427,28 +493,50 @@ class CuratedMetricsPipelineV2:
                 sc, ec = b['start_col'], b['end_col']
                 mult = detect_unit_multiplier(rows, sc, ec)
 
-                part_col, q_col = None, None
+                part_col = None
                 for c in range(sc, ec + 1):
-                    for r in range(8, min(14, len(rows))):
+                    for r in range(7, min(14, len(rows))):
                         txt = re.sub(r'\s+', ' ', str(rows[r][c] or '').strip().lower())
-                        if 'particular' in txt and not part_col: part_col = c
-                        if ('for the quarter' in txt or 'up to the quarter' in txt) and 'previous' not in txt and 'corresponding' not in txt:
-                            if not q_col: q_col = c
-                if not part_col: part_col = sc + 1 if sc + 1 <= ec else sc
-                if not q_col: q_col = sc + 2 if sc + 2 <= ec else sc + 1
+                        if 'particular' in txt and part_col is None: part_col = c; break
+                    if part_col is not None: break
+                if part_col is None: part_col = sc
 
-                for r in range(9, len(rows)):
+                q_col = None
+                for c in range(sc, ec + 1):
+                    if c == part_col: continue
+                    for r in range(7, min(14, len(rows))):
+                        txt = re.sub(r'\s+', ' ', str(rows[r][c] or '').strip().lower())
+                        if ('for the quarter' in txt or 'up to the quarter' in txt or 'quarter ended' in txt) and 'previous' not in txt and 'corresponding' not in txt:
+                            q_col = c; break
+                    if q_col is not None: break
+
+                if q_col is None:
+                    q_col = part_col + 1 if part_col + 1 <= ec else part_col
+
+                # Magnitude check for L-7
+                for r in range(9, min(25, len(rows))):
+                    v = str(rows[r][q_col] if q_col < len(rows[r]) else '')
+                    try:
+                        fv = float(v.replace(',', ''))
+                        if fv > 5000000.0 and mult == 1.0:
+                            mult = 0.01
+                            break
+                    except: pass
+
+                for r in range(8, len(rows)):
                     line = str(rows[r][part_col] or '').strip().lower() if part_col < len(rows[r]) else ''
                     if 'ceded in reinsurance' in line or 'amount ceded' in line or '2. (' in line or '2.(' in line:
                         break
                     val = round(clean_val(rows[r][q_col] if q_col < len(rows[r]) else None) * mult, 4)
-                    if 'claims by death' in line or 'death claims' in line:
-                        if metrics[pid].get('death_claims_amount') is None:
+                    norm_line = re.sub(r'[\(\)/]+', ' ', line)
+
+                    if 'claims by death' in norm_line or 'death claims' in norm_line:
+                        if metrics[pid].get('death_claims_amount') is None or metrics[pid].get('death_claims_amount') == 0:
                             metrics[pid]['death_claims_amount'] = val
-                    elif 'by maturity' in line or 'maturity' in line:
-                        if metrics[pid].get('maturity_amount') is None:
+                    elif 'by maturity' in norm_line or 'maturity' in norm_line:
+                        if metrics[pid].get('maturity_amount') is None or metrics[pid].get('maturity_amount') == 0:
                             metrics[pid]['maturity_amount'] = val
-                    elif 'total' in line and ('benefits' in line or 'claims' in line):
+                    elif 'total' in norm_line and ('benefits' in norm_line or 'claims' in norm_line):
                         metrics[pid]['total_claim_amount_reported'] = val
 
         # ----------------------------------------------------
@@ -461,10 +549,13 @@ class CuratedMetricsPipelineV2:
                 if pid not in metrics: continue
                 sc, ec = b['start_col'], b['end_col']
                 mult = detect_unit_multiplier(rows, sc, ec)
-                part_col = sc + 1 if sc + 1 <= ec else sc
-                q_col = sc + 2 if sc + 2 <= ec else sc + 1
+                part_col = sc
+                for c in range(sc, ec + 1):
+                    for r in range(6, min(12, len(rows))):
+                        if 'particular' in str(rows[r][c] or '').lower(): part_col = c; break
+                q_col = part_col + 1 if part_col + 1 <= ec else part_col
 
-                for r in range(9, len(rows)):
+                for r in range(8, len(rows)):
                     line = str(rows[r][part_col] or '').strip().lower() if part_col < len(rows[r]) else ''
                     val = round(clean_val(rows[r][q_col] if q_col < len(rows[r]) else None) * mult, 4)
                     if 'total' in line:
@@ -478,11 +569,14 @@ class CuratedMetricsPipelineV2:
                 if pid not in metrics: continue
                 sc, ec = b['start_col'], b['end_col']
                 mult = detect_unit_multiplier(rows, sc, ec)
-                part_col = sc + 1 if sc + 1 <= ec else sc
-                q_col = sc + 2 if sc + 2 <= ec else sc + 1
+                part_col = sc
+                for c in range(sc, ec + 1):
+                    for r in range(6, min(12, len(rows))):
+                        if 'particular' in str(rows[r][c] or '').lower(): part_col = c; break
+                q_col = part_col + 1 if part_col + 1 <= ec else part_col
                 reserves_total = 0.0
 
-                for r in range(9, len(rows)):
+                for r in range(8, len(rows)):
                     line = str(rows[r][part_col] or '').strip().lower() if part_col < len(rows[r]) else ''
                     val = round(clean_val(rows[r][q_col] if q_col < len(rows[r]) else None) * mult, 4)
                     if 'share premium' in line:
@@ -502,16 +596,17 @@ class CuratedMetricsPipelineV2:
                 pid = b['period_id']
                 if pid not in metrics: continue
                 sc, ec = b['start_col'], b['end_col']
-                part_col, q_col = sc + 1 if sc + 1 <= ec else sc, sc + 2 if sc + 2 <= ec else sc + 1
+                part_col = sc
+                q_col = sc + 1
                 for c in range(sc, ec + 1):
-                    for r in range(7, min(13, len(rows))):
+                    for r in range(6, min(13, len(rows))):
                         txt = re.sub(r'\s+', ' ', str(rows[r][c] or '').strip().lower())
                         if 'particular' in txt: part_col = c
-                        if ('for the quarter' in txt or 'up to the quarter' in txt) and 'previous' not in txt and 'corresponding' not in txt:
+                        if ('for the quarter' in txt or 'up to the quarter' in txt or 'quarter ended' in txt) and 'previous' not in txt and 'corresponding' not in txt:
                             q_col = c
 
                 current_p_basis = None
-                for r in range(9, len(rows)):
+                for r in range(8, len(rows)):
                     line = str(rows[r][part_col] or '').strip().lower() if part_col < len(rows[r]) else ''
                     val = clean_val(rows[r][q_col] if q_col < len(rows[r]) else None)
 
@@ -563,10 +658,33 @@ class CuratedMetricsPipelineV2:
                     elif 'conservation ratio' in line:
                         metrics[pid]['conservation_ratio'] = val
                     elif 'solvency ratio' in line:
-                        norm_solvency = val if val < 10.0 else round(val / 100.0, 4)
-                        metrics[pid]['solvency_ratio'] = norm_solvency
+                        if val > 0:
+                            norm_solvency = val if val < 10.0 else round(val / 100.0, 4)
+                            metrics[pid]['solvency_ratio'] = norm_solvency
                     elif 'roe' in line or 'return on equity' in line:
                         metrics[pid]['roe_pct'] = val
+
+        # ----------------------------------------------------
+        # SCHEDULE L-32: Solvency Margin Fallback (e.g. for LIC)
+        # ----------------------------------------------------
+        if 'L-32' in sheet_data:
+            rows = sheet_data['L-32']
+            for b in scan_quarter_blocks_rows(rows):
+                pid = b['period_id']
+                if pid not in metrics: continue
+                if metrics[pid].get('solvency_ratio') is not None and metrics[pid].get('solvency_ratio') > 0:
+                    continue
+                sc, ec = b['start_col'], b['end_col']
+
+                for r in range(len(rows)):
+                    line = " ".join(str(rows[r][c] or '') for c in range(sc, min(ec + 1, len(rows[r])))).lower()
+                    if 'solvency ratio' in line:
+                        for c in range(sc, min(ec + 1, len(rows[r]))):
+                            val = rows[r][c]
+                            if isinstance(val, (int, float)) and val > 0 and val != 10:
+                                norm_s = val if val < 10.0 else round(val / 100.0, 4)
+                                metrics[pid]['solvency_ratio'] = norm_s
+                                break
 
         # ----------------------------------------------------
         # SCHEDULE L-38: Channels & Intermediaries
@@ -617,8 +735,12 @@ class CuratedMetricsPipelineV2:
                 pid = b['period_id']
                 if pid not in metrics: continue
                 sc, ec = b['start_col'], b['end_col']
-                part_col = sc + 1 if sc + 1 <= ec else sc
-                reg_col = sc + 3 if sc + 3 <= ec else sc + 2
+                part_col = sc
+                for c in range(sc, ec + 1):
+                    for r in range(6, min(12, len(rows))):
+                        if 'particular' in str(rows[r][c] or '').lower(): part_col = c; break
+                reg_col = part_col + 2 if part_col + 2 <= ec else ec
+
                 for r in range(8, len(rows)):
                     line = str(rows[r][part_col] or '').strip().lower() if part_col < len(rows[r]) else ''
                     val = clean_int(rows[r][reg_col] if reg_col < len(rows[r]) else None)
@@ -635,8 +757,12 @@ class CuratedMetricsPipelineV2:
                 pid = b['period_id']
                 if pid not in metrics: continue
                 sc, ec = b['start_col'], b['end_col']
-                part_col = sc + 1 if sc + 1 <= ec else sc
-                num_col = sc + 3 if sc + 3 <= ec else sc + 2
+                part_col = sc
+                for c in range(sc, ec + 1):
+                    for r in range(6, min(12, len(rows))):
+                        if 'particular' in str(rows[r][c] or '').lower(): part_col = c; break
+                num_col = part_col + 2 if part_col + 2 <= ec else ec
+
                 for r in range(8, len(rows)):
                     line = str(rows[r][part_col] or '').strip().lower() if part_col < len(rows[r]) else ''
                     val = clean_int(rows[r][num_col] if num_col < len(rows[r]) else None)
