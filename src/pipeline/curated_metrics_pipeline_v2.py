@@ -257,14 +257,14 @@ class CuratedMetricsPipelineV2:
 
                 if total_col is None: total_col = part_col + 1
 
-                # Raw magnitude check: if total > 5,000,000 and mult == 1.0, scale was '000
+                # Raw magnitude check: if total > 5,000,000 and mult == 1.0, scale was '000 (except LIC whose quarterly premium is genuine 10M+ Lakhs)
                 test_val = 0.0
                 for r in range(8, len(rows)):
                     line = " ".join([str(rows[r][c] or '') for c in range(sc, total_col) if rows[r][c] is not None]).strip().lower()
                     if 'total' in line:
                         test_val = clean_val(rows[r][total_col] if total_col < len(rows[r]) else None)
                         break
-                if test_val > 5000000.0 and mult == 1.0:
+                if company_id != 'LIC' and test_val > 5000000.0 and mult == 1.0:
                     mult = 0.01
 
                 for r in range(8, len(rows)):
@@ -364,8 +364,8 @@ class CuratedMetricsPipelineV2:
                     lives_val = clean_val(rows[r][lives_col] if lives_col < len(rows[r]) else None)
                     sa_val = clean_val(rows[r][sa_col] if sa_col < len(rows[r]) else None)
 
-                    if p_val > 5000000.0: p_val /= 100.0
-                    if sa_val > 50000000.0: sa_val /= 100.0
+                    if company_id != 'LIC' and p_val > 5000000.0: p_val /= 100.0
+                    if company_id != 'LIC' and sa_val > 50000000.0: sa_val /= 100.0
 
                     if 'from ' in part_text or 'above ' in part_text:
                         total_sa += sa_val
@@ -444,7 +444,7 @@ class CuratedMetricsPipelineV2:
                     v = str(rows[r][total_col] if total_col < len(rows[r]) else '')
                     try:
                         fv = float(v.replace(',', ''))
-                        if fv > 5000000.0 and mult == 1.0:
+                        if company_id != 'LIC' and fv > 5000000.0 and mult == 1.0:
                             mult = 0.01
                             break
                     except: pass
@@ -512,7 +512,7 @@ class CuratedMetricsPipelineV2:
                     v = str(rows[r][q_col] if q_col < len(rows[r]) else '')
                     try:
                         fv = abs(float(v.replace(',', '')))
-                        if fv > 5000000.0 and mult == 1.0:
+                        if company_id != 'LIC' and fv > 5000000.0 and mult == 1.0:
                             mult = 0.01
                             break
                     except: pass
@@ -565,7 +565,7 @@ class CuratedMetricsPipelineV2:
                     v = str(rows[r][q_col] if q_col < len(rows[r]) else '')
                     try:
                         fv = float(v.replace(',', ''))
-                        if fv > 5000000.0 and mult == 1.0:
+                        if company_id != 'LIC' and fv > 5000000.0 and mult == 1.0:
                             mult = 0.01
                             break
                     except: pass
