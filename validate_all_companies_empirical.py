@@ -390,6 +390,211 @@ def run_empirical_audit():
             'unit': 'Ratio',
             'expected_db': 1.96,
             'desc': 'Form L-22 Solvency Ratio (1.96x)'
+        },
+
+        # --- 7. ADITYA BIRLA SUN LIFE ---
+        {
+            'company_id': 'ADITYA_BIRLA_SUN_LIFE',
+            'company_name': 'Aditya Birla Sun Life',
+            'file': 'ADITYA_BIRLA_SUN_LIFE_INSURANCE_Consolidated.xlsx',
+            'period_id': 'FY2021-22_Q1',
+            'sheet': 'L-2',
+            'metric': 'profit_after_tax',
+            'cell_coord': 'Row 33, Col 2',
+            'excel_val_raw': 246162,
+            'unit': '000',
+            'expected_db': 2461.62,
+            'desc': 'Form L-2 Profit after tax (₹24.62 Cr)'
+        },
+        {
+            'company_id': 'ADITYA_BIRLA_SUN_LIFE',
+            'company_name': 'Aditya Birla Sun Life',
+            'file': 'ADITYA_BIRLA_SUN_LIFE_INSURANCE_Consolidated.xlsx',
+            'period_id': 'FY2021-22_Q1',
+            'sheet': 'L-22',
+            'metric': 'solvency_ratio',
+            'cell_coord': 'Row 70, Col 2',
+            'excel_val_raw': 1.82,
+            'unit': 'Ratio',
+            'expected_db': 1.82,
+            'desc': 'Form L-22 Solvency Ratio (1.82x)'
+        },
+        {
+            'company_id': 'ADITYA_BIRLA_SUN_LIFE',
+            'company_name': 'Aditya Birla Sun Life',
+            'file': 'ADITYA_BIRLA_SUN_LIFE_INSURANCE_Consolidated.xlsx',
+            'period_id': 'FY2024-25_Q4',
+            'sheet': 'L-4',
+            'metric': 'total_premium',
+            'cell_coord': 'Form L-4 Total Premiums',
+            'excel_val_raw': 703413,
+            'unit': 'Lakhs',
+            'expected_db': 703413.0,
+            'desc': 'Form L-4 Total Premium (₹7,034.13 Cr)'
+        },
+
+        # --- 8. AGEAS FEDERAL LIFE ---
+        {
+            'company_id': 'AGEAS_FEDERAL_LIFE',
+            'company_name': 'Ageas Federal Life',
+            'file': 'AGEAS_FEDERAL_LIFE_INSURANCE_Consolidated.xlsx',
+            'period_id': 'FY2021-22_Q1',
+            'sheet': 'L-2',
+            'metric': 'profit_after_tax',
+            'cell_coord': 'Row 32, Col 2',
+            'excel_val_raw': 101661,
+            'unit': '000',
+            'expected_db': 1016.61,
+            'desc': 'Form L-2 Profit after tax (₹10.17 Cr)'
+        },
+        {
+            'company_id': 'AGEAS_FEDERAL_LIFE',
+            'company_name': 'Ageas Federal Life',
+            'file': 'AGEAS_FEDERAL_LIFE_INSURANCE_Consolidated.xlsx',
+            'period_id': 'FY2021-22_Q1',
+            'sheet': 'L-22',
+            'metric': 'solvency_ratio',
+            'cell_coord': 'Form L-22 Solvency',
+            'excel_val_raw': 3.08,
+            'unit': 'Ratio',
+            'expected_db': 3.08,
+            'desc': 'Form L-22 Solvency Ratio (3.08x)'
+        },
+        {
+            'company_id': 'AGEAS_FEDERAL_LIFE',
+            'company_name': 'Ageas Federal Life',
+            'file': 'AGEAS_FEDERAL_LIFE_INSURANCE_Consolidated.xlsx',
+            'period_id': 'FY2024-25_Q4',
+            'sheet': 'L-4',
+            'metric': 'total_premium',
+            'cell_coord': 'Form L-4 Total',
+            'excel_val_raw': 269737,
+            'unit': 'Lakhs',
+            'expected_db': 269737.0,
+            'desc': 'Form L-4 Total Premium (₹2,697.37 Cr)'
+        },
+
+        # --- 9. AVIVA LIFE ---
+        {
+            'company_id': 'AVIVA_LIFE',
+            'company_name': 'Aviva Life Insurance',
+            'file': 'AVIVA_LIFE_INSURANCE_Consolidated.xlsx',
+            'period_id': 'FY2021-22_Q1',
+            'sheet': 'L-22',
+            'metric': 'solvency_ratio',
+            'cell_coord': 'Form L-22 Solvency',
+            'excel_val_raw': 2.22,
+            'unit': 'Ratio',
+            'expected_db': 2.22,
+            'desc': 'Form L-22 Solvency Ratio (2.22x)'
+        },
+        {
+            'company_id': 'AVIVA_LIFE',
+            'company_name': 'Aviva Life Insurance',
+            'file': 'AVIVA_LIFE_INSURANCE_Consolidated.xlsx',
+            'period_id': 'FY2024-25_Q4',
+            'sheet': 'L-4',
+            'metric': 'total_premium',
+            'cell_coord': 'Form L-4 Total',
+            'excel_val_raw': 32817,
+            'unit': 'Lakhs',
+            'expected_db': 32817.0,
+            'desc': 'Form L-4 Total Premium (₹328.17 Cr)'
+        },
+
+        # --- 10. BANDHAN LIFE ---
+        {
+            'company_id': 'BANDHAN_LIFE',
+            'company_name': 'Bandhan Life Insurance',
+            'file': 'BANDHAN_LIFE_INSURANCE_Consolidated.xlsx',
+            'period_id': 'FY2021-22_Q1',
+            'sheet': 'L-2',
+            'metric': 'profit_after_tax',
+            'cell_coord': 'Row 34, Col 2',
+            'excel_val_raw': -260493,
+            'unit': '000',
+            'expected_db': -2604.93,
+            'desc': 'Form L-2 Profit after tax (-₹26.05 Cr)'
+        },
+        {
+            'company_id': 'BANDHAN_LIFE',
+            'company_name': 'Bandhan Life Insurance',
+            'file': 'BANDHAN_LIFE_INSURANCE_Consolidated.xlsx',
+            'period_id': 'FY2021-22_Q1',
+            'sheet': 'L-22',
+            'metric': 'solvency_ratio',
+            'cell_coord': 'Row 62, Col 2',
+            'excel_val_raw': 2.36,
+            'unit': 'Ratio',
+            'expected_db': 2.36,
+            'desc': 'Form L-22 Solvency Ratio (2.36x)'
+        },
+        {
+            'company_id': 'BANDHAN_LIFE',
+            'company_name': 'Bandhan Life Insurance',
+            'file': 'BANDHAN_LIFE_INSURANCE_Consolidated.xlsx',
+            'period_id': 'FY2024-25_Q4',
+            'sheet': 'L-4',
+            'metric': 'total_premium',
+            'cell_coord': 'Form L-4 Total',
+            'excel_val_raw': 20579,
+            'unit': 'Lakhs',
+            'expected_db': 20579.0,
+            'desc': 'Form L-4 Total Premium (₹205.79 Cr)'
+        },
+
+        # --- 11. BHARTI AXA LIFE ---
+        {
+            'company_id': 'BHARTI_AXA_LIFE',
+            'company_name': 'Bharti AXA Life',
+            'file': 'BHARTI_AXA_LIFE_INSURANCE_Consolidated.xlsx',
+            'period_id': 'FY2021-22_Q1',
+            'sheet': 'L-4',
+            'metric': 'gross_written_premium',
+            'cell_coord': 'Row 12, Col 2',
+            'excel_val_raw': 4290266,
+            'unit': '000',
+            'expected_db': 42902.66,
+            'desc': 'Form L-4 Total Premium (₹429.03 Cr)'
+        },
+        {
+            'company_id': 'BHARTI_AXA_LIFE',
+            'company_name': 'Bharti AXA Life',
+            'file': 'BHARTI_AXA_LIFE_INSURANCE_Consolidated.xlsx',
+            'period_id': 'FY2021-22_Q1',
+            'sheet': 'L-2',
+            'metric': 'profit_after_tax',
+            'cell_coord': 'Row 26, Col 2',
+            'excel_val_raw': -842439,
+            'unit': '000',
+            'expected_db': -8424.39,
+            'desc': 'Form L-2 Profit after tax (-₹84.24 Cr)'
+        },
+        {
+            'company_id': 'BHARTI_AXA_LIFE',
+            'company_name': 'Bharti AXA Life',
+            'file': 'BHARTI_AXA_LIFE_INSURANCE_Consolidated.xlsx',
+            'period_id': 'FY2021-22_Q1',
+            'sheet': 'L-22',
+            'metric': 'solvency_ratio',
+            'cell_coord': 'Form L-22 Solvency',
+            'excel_val_raw': 1.76,
+            'unit': 'Ratio',
+            'expected_db': 1.76,
+            'desc': 'Form L-22 Solvency Ratio (1.76x)'
+        },
+        {
+            'company_id': 'BHARTI_AXA_LIFE',
+            'company_name': 'Bharti AXA Life',
+            'file': 'BHARTI_AXA_LIFE_INSURANCE_Consolidated.xlsx',
+            'period_id': 'FY2024-25_Q4',
+            'sheet': 'L-4',
+            'metric': 'total_premium',
+            'cell_coord': 'Form L-4 Total',
+            'excel_val_raw': 108565,
+            'unit': 'Lakhs',
+            'expected_db': 108565.0,
+            'desc': 'Form L-4 Total Premium (₹1,085.65 Cr)'
         }
     ]
 

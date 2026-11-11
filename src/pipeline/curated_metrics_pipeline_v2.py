@@ -54,6 +54,41 @@ COMPANY_METADATA = {
         'category': 'Private',
         'website': 'https://www.sbilife.co.in',
         'top_products': 'eShield Next, Smart Platina Plus, Retiresmart, Smart Wealth Builder'
+    },
+    'ADITYA_BIRLA_SUN_LIFE': {
+        'name': 'Aditya Birla Sun Life Insurance Company Limited',
+        'reg_no': '109',
+        'category': 'Private',
+        'website': 'https://lifeinsurance.adityabirlacapital.com',
+        'top_products': 'DigiShield Plan, Vision LifeIncome, Assured Income Plus'
+    },
+    'AGEAS_FEDERAL_LIFE': {
+        'name': 'Ageas Federal Life Insurance Company Limited',
+        'reg_no': '135',
+        'category': 'Private',
+        'website': 'https://www.ageasfederal.com',
+        'top_products': 'Life Guaranteed Income Plan, Smart Wealth Plan'
+    },
+    'AVIVA_LIFE': {
+        'name': 'Aviva Life Insurance Company India Limited',
+        'reg_no': '122',
+        'category': 'Private',
+        'website': 'https://www.avivaindia.com',
+        'top_products': 'Signature Guaranteed Income, Extra Cover, Affluence'
+    },
+    'BANDHAN_LIFE': {
+        'name': 'Bandhan Life Insurance Limited',
+        'reg_no': '138',
+        'category': 'Private',
+        'website': 'https://www.bandhanlife.com',
+        'top_products': 'iTerm Prime, Guaranteed Income, POS iSuraksha'
+    },
+    'BHARTI_AXA_LIFE': {
+        'name': 'Bharti AXA Life Insurance Company Limited',
+        'reg_no': '130',
+        'category': 'Private',
+        'website': 'https://www.bhartiaxa.com',
+        'top_products': 'Flexi Term Pro, Guaranteed Income Pro, Elite Protect'
     }
 }
 
