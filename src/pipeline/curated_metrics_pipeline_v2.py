@@ -89,6 +89,104 @@ COMPANY_METADATA = {
         'category': 'Private',
         'website': 'https://www.bhartiaxa.com',
         'top_products': 'Flexi Term Pro, Guaranteed Income Pro, Elite Protect'
+    },
+    'MAX_LIFE': {
+        'name': 'Max Life Insurance Company Limited',
+        'reg_no': '104',
+        'category': 'Private',
+        'website': 'https://www.maxlifeinsurance.com',
+        'top_products': 'Smart Wealth Advantage, Smart Total Elite Protection, Flexi Wealth Plus'
+    },
+    'BAJAJ_ALLIANZ_LIFE': {
+        'name': 'Bajaj Allianz Life Insurance Company Limited',
+        'reg_no': '116',
+        'category': 'Private',
+        'website': 'https://www.bajajallianzlife.com',
+        'top_products': 'Smart Protect Goal, Guaranteed Income Goal, Life Future Gain'
+    },
+    'CREDITACCESS_LIFE': {
+        'name': 'CreditAccess Life Insurance Limited',
+        'reg_no': '165',
+        'category': 'Private',
+        'website': 'https://www.creditaccesslife.in',
+        'top_products': 'Micro Insurance, Group Credit Life, Term Life'
+    },
+    'EDELWEISS_TOKIO_LIFE': {
+        'name': 'Edelweiss Tokio Life Insurance Company Limited',
+        'reg_no': '147',
+        'category': 'Private',
+        'website': 'https://www.edelweisstokio.in',
+        'top_products': 'Zindagi Plus, Active Income, Premier Guaranteed Income'
+    },
+    'FUTURE_GENERALI_LIFE': {
+        'name': 'Future Generali India Life Insurance Company Limited',
+        'reg_no': '133',
+        'category': 'Private',
+        'website': 'https://life.futuregenerali.in',
+        'top_products': 'Care Plus, Triple Anand Advantage, Big Dream'
+    },
+    'GO_DIGIT_LIFE': {
+        'name': 'Go Digit Life Insurance Limited',
+        'reg_no': '166',
+        'category': 'Private',
+        'website': 'https://www.godigit.com/life-insurance',
+        'top_products': 'Digit Term Life, Group Term Life, Credit Life'
+    },
+    'INDIAFIRST_LIFE': {
+        'name': 'IndiaFirst Life Insurance Company Limited',
+        'reg_no': '143',
+        'category': 'Private',
+        'website': 'https://www.indiafirstlife.com',
+        'top_products': 'Guaranteed Protection Plus, Maha Jeevan Plan, Radiant Smart Invest'
+    },
+    'RELIANCE_NIPPON_LIFE': {
+        'name': 'Reliance Nippon Life Insurance Company Limited',
+        'reg_no': '121',
+        'category': 'Private',
+        'website': 'https://www.reliancenipponlife.com',
+        'top_products': 'Protection Plus, Nishchit Samrudhi, Super Endowment'
+    },
+    'KOTAK_LIFE': {
+        'name': 'Kotak Mahindra Life Insurance Company Limited',
+        'reg_no': '107',
+        'category': 'Private',
+        'website': 'https://www.kotaklife.com',
+        'top_products': 'Kotak e-Term, Assured Savings, Premier Income'
+    },
+    'PNB_METLIFE': {
+        'name': 'PNB MetLife India Insurance Company Limited',
+        'reg_no': '117',
+        'category': 'Private',
+        'website': 'https://www.pnbmetlife.com',
+        'top_products': 'Mera Term Plan Plus, Guaranteed Future Plan, Smart Platinum'
+    },
+    'PRAMERICA_LIFE': {
+        'name': 'Pramerica Life Insurance Limited',
+        'reg_no': '140',
+        'category': 'Private',
+        'website': 'https://www.pramericalife.in',
+        'top_products': 'TruShield, Rakshak Smart, U-Protect'
+    },
+    'SHRIRAM_LIFE': {
+        'name': 'Shriram Life Insurance Company Limited',
+        'reg_no': '128',
+        'category': 'Private',
+        'website': 'https://www.shriramlife.com',
+        'top_products': 'Golden Income, Smart Protection, Assured Income'
+    },
+    'SUD_LIFE': {
+        'name': 'Star Union Dai-ichi Life Insurance Company Limited',
+        'reg_no': '142',
+        'category': 'Private',
+        'website': 'https://www.sudlife.in',
+        'top_products': 'Century Royale, Premier Protection, Guaranteed Money Back'
+    },
+    'TATA_AIA_LIFE': {
+        'name': 'Tata AIA Life Insurance Company Limited',
+        'reg_no': '110',
+        'category': 'Private',
+        'website': 'https://www.tataaia.com',
+        'top_products': 'Sampoorna Raksha Supreme, Fortune Guarantee Plus, Param Rakshak'
     }
 }
 
@@ -271,13 +369,18 @@ class CuratedMetricsPipelineV2:
                     line = " ".join([str(rows[r][c] or '') for c in range(sc, total_col) if rows[r][c] is not None]).strip().lower()
                     raw_val = clean_val(rows[r][total_col] if total_col < len(rows[r]) else None)
                     val = round(raw_val * mult, 4)
-                    if 'first year' in line:
+
+                    # Stop if we already captured total premium and encountered a new header or stacked comparison block
+                    if 'l4_total_premium' in metrics[pid] and any(k in line for k in ['period ended', 'quarter ended', 'first year', 'particulars']):
+                        break
+
+                    if 'first year' in line and 'l4_first_year_premium' not in metrics[pid]:
                         metrics[pid]['l4_first_year_premium'] = val
-                    elif 'renewal' in line:
+                    elif 'renewal' in line and 'l4_renewal_premium' not in metrics[pid]:
                         metrics[pid]['l4_renewal_premium'] = val
-                    elif 'single' in line:
+                    elif 'single' in line and 'l4_single_premium' not in metrics[pid]:
                         metrics[pid]['l4_single_premium'] = val
-                    elif 'total premium' in line or (line == 'total' and 'l4_total_premium' not in metrics[pid]):
+                    elif ('total premium' in line or line == 'total') and 'l4_total_premium' not in metrics[pid]:
                         metrics[pid]['l4_total_premium'] = val
 
         # ----------------------------------------------------
@@ -522,11 +625,15 @@ class CuratedMetricsPipelineV2:
                     val = round(clean_val(rows[r][q_col] if q_col < len(rows[r]) else None) * mult, 4)
                     norm_line = re.sub(r'[\(\)/]+', ' ', line)
 
-                    if re.search(r'(?:profit|loss).*before tax', norm_line):
+                    # Stop if we already captured profit after tax and encountered a new header or stacked comparison block
+                    if 'profit_after_tax' in metrics[pid] and any(k in norm_line for k in ['period ended', 'quarter ended', 'particulars', 'income from investments']):
+                        break
+
+                    if re.search(r'(?:profit|loss).*before tax', norm_line) and 'profit_before_tax' not in metrics[pid]:
                         metrics[pid]['profit_before_tax'] = val
-                    elif re.search(r'(?:profit|loss).*after tax', norm_line):
+                    elif re.search(r'(?:profit|loss).*after tax', norm_line) and 'profit_after_tax' not in metrics[pid]:
                         metrics[pid]['profit_after_tax'] = val
-                    elif 'balance' in norm_line and ('brought forward' in norm_line or 'carried forward' in norm_line or 'carried to balance' in norm_line):
+                    elif 'balance' in norm_line and ('brought forward' in norm_line or 'carried forward' in norm_line or 'carried to balance' in norm_line) and 'profit_loss_carried_forward' not in metrics[pid]:
                         metrics[pid]['profit_loss_carried_forward'] = val
 
         # ----------------------------------------------------
@@ -705,33 +812,36 @@ class CuratedMetricsPipelineV2:
                     elif 'conservation ratio' in line:
                         metrics[pid]['conservation_ratio'] = val
                     elif 'solvency ratio' in line:
-                        if val > 0:
-                            norm_solvency = val if val < 10.0 else round(val / 100.0, 4)
-                            metrics[pid]['solvency_ratio'] = norm_solvency
+                        if 0 < val <= 15.0:
+                            metrics[pid]['solvency_ratio'] = val
+                        elif 15.0 < val <= 1500.0:
+                            metrics[pid]['solvency_ratio'] = round(val / 100.0, 4)
                     elif 'roe' in line or 'return on equity' in line:
                         metrics[pid]['roe_pct'] = val
 
         # ----------------------------------------------------
-        # SCHEDULE L-32: Solvency Margin Fallback (e.g. for LIC)
+        # SCHEDULE L-32: Solvency Margin Fallback (e.g. for LIC, PNB MetLife)
         # ----------------------------------------------------
         if 'L-32' in sheet_data:
             rows = sheet_data['L-32']
             for b in scan_quarter_blocks_rows(rows):
                 pid = b['period_id']
                 if pid not in metrics: continue
-                if metrics[pid].get('solvency_ratio') is not None and metrics[pid].get('solvency_ratio') > 0:
+                if metrics[pid].get('solvency_ratio') is not None and 0 < metrics[pid]['solvency_ratio'] <= 15.0:
                     continue
                 sc, ec = b['start_col'], b['end_col']
 
-                for r in range(len(rows)):
-                    line = " ".join(str(rows[r][c] or '') for c in range(sc, min(ec + 1, len(rows[r])))).lower()
-                    if 'solvency ratio' in line:
-                        for c in range(sc, min(ec + 1, len(rows[r]))):
-                            val = rows[r][c]
-                            if isinstance(val, (int, float)) and val > 0 and val != 10:
-                                norm_s = val if val < 10.0 else round(val / 100.0, 4)
-                                metrics[pid]['solvency_ratio'] = norm_s
-                                break
+                found_s = None
+                for r in range(len(rows) - 1, 10, -1):
+                    for c in range(sc, min(ec + 1, len(rows[r]))):
+                        val = rows[r][c]
+                        if isinstance(val, (int, float)) and 1.0 <= val <= 10.0 and val not in (1, 2, 3, 4, 5, 6, 7, 8, 9, 10):
+                            found_s = round(float(val), 4)
+                            break
+                    if found_s is not None:
+                        break
+                if found_s is not None:
+                    metrics[pid]['solvency_ratio'] = found_s
 
         # ----------------------------------------------------
         # SCHEDULE L-38: Channels & Intermediaries
