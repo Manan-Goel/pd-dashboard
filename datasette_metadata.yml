@@ -1,0 +1,24 @@
+title: "Life Insurance Statutory Intelligence — IRDAI Regulatory Data Warehouse"
+description_html: "<p>SQLite warehouse covering all 25 regulated life insurers in India across 20 statutory reporting quarters (FY2021-22 to FY2025-26). Data sourced from official IRDAI quarterly statutory filings. <strong>Read-only.</strong></p>"
+license: Proprietary
+license_url: ""
+databases:
+  life_insurance_curated_v2:
+    description: "Star-schema curated warehouse — 4 fact tables, 3 dimension tables, 4 views. 64 standardised curated metrics per insurer per quarter."
+    tables:
+      fact_company_quarterly_metrics:
+        description: "474 rows × 89 columns. Core quarterly financial metrics per insurer per period (Form L-1, L-2, L-4, L-22, L-25, L-32, L-36, L-38, L-41, L-45). Primary fact table."
+        sort: period_id
+        sort_desc: true
+      fact_geographical_distribution:
+        description: "17,960 rows. State-wise premium, policies and sum assured breakdown sourced from Form L-34."
+      fact_persistency_cohorts:
+        description: "2,158 rows. 13-month to 61-month actuarial retention cohorts from Form L-33."
+      fact_intermediary_channel_metrics:
+        description: "2,278 rows. Bancassurance, agency, broker, direct, web aggregator channel throughput from Form L-35."
+      dim_company:
+        description: "25 rows. IRDAI-registered life insurer master dimension with registration numbers, categories, and promoter type (public/private)."
+      dim_period:
+        description: "20 rows. Reporting quarter dimension covering FY2021-22 Q1 through FY2025-26 Q4."
+      dim_statement_schedule:
+        description: "59 rows. IRDAI statutory form and schedule catalogue — maps form codes to descriptions."

@@ -1,0 +1,8 @@
+services:
+  - type: web
+    name: life-insurance-db-explorer
+    env: python
+    plan: free
+    buildCommand: "pip install datasette"
+    startCommand: "datasette life_insurance_curated_v2.db --host 0.0.0.0 --port $PORT --metadata datasette_metadata.yml --cors --setting sql_time_limit_ms 5000 --setting max_returned_rows 2000 --setting default_page_size 25"
+    healthCheckPath: "/-/health"
